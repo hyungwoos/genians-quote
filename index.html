@@ -8,7 +8,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
         :root { --genians-green: #1fb53a; --border-color: #000; --gray-bg: #f8f9fa; }
-        * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
+        * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         body { font-family: 'Noto Sans KR', sans-serif; background: #525659; margin: 0; padding: 20px; color: #333; }
 
         .toolbar { width: 210mm; margin: 0 auto 15px; background: #fff; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -31,7 +31,7 @@
         .info-right table { width: 100%; border-collapse: collapse; border: 2px solid var(--border-color); font-size: 11px; }
         .info-right th, .info-right td { border: 1px solid var(--border-color); padding: 4px; text-align: center; }
         .info-right th { background: #f0f0f0; font-weight: bold; }
-        .info-right .provider-title { writing-mode: vertical-rl; text-orientation: upright; width: 25px; letter-spacing: 5px; font-size: 13px; }
+        .info-right .provider-title { writing-mode: vertical-rl; text-orientation: upright; width: 30px; letter-spacing: 5px; font-size: 13px; }
         
         .main-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border-color); font-size: 11px; table-layout: fixed; }
         .main-table th { background: var(--genians-green); color: white; height: 35px; border: 1px solid var(--genians-green); }
@@ -51,64 +51,63 @@
         .only-print { display: none; }
         .print-text { display: none; }
 
+        /* ========= PDF 인쇄 강제 설정 ========= */
         @media print {
-            body { background: none; padding: 0; }
+            @page { size: A4 portrait; margin: 0; } /* 모바일에서도 무조건 A4 세로 기준으로 렌더링 강제 */
+            body { background: none; padding: 0; margin: 0; }
             .toolbar, .btn-del, .no-print { display: none !important; }
             .only-print { display: block !important; }
-            .page { box-shadow: none; margin: 0; }
             .print-text { display: block !important; }
+            
+            /* 모바일 화면 비율 무시하고 210mm 고정 */
+            .page { 
+                width: 210mm !important; 
+                min-height: 297mm !important; 
+                margin: 0 auto !important; 
+                padding: 15mm !important; 
+                box-shadow: none !important; 
+                position: relative !important;
+            }
+            .page > div:first-child { position: absolute !important; top: 15mm !important; left: 15mm !important; text-align: left !important; margin-bottom: 0 !important; }
+            .doc-title { margin-top: 0 !important; margin-bottom: 30px !important; font-size: 36px !important; }
+            
+            .info-section { flex-direction: row !important; }
+            .info-left { width: 45% !important; }
+            .info-right { width: 50% !important; }
+            .main-table { display: table !important; table-layout: fixed !important; white-space: normal !important; }
+            .main-table th, .main-table td { width: auto !important; padding: 2px !important; }
+            
             input::placeholder, textarea::placeholder { color: transparent; }
-            .info-left .input-line, input, textarea { border: none !important; }
+            .info-left .input-line, input, textarea { border: none !important; background: transparent !important; }
             input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
             select { display: none !important; }
             .remarks-section textarea { border: none !important; }
+            .provider-title { white-space: nowrap !important; }
         }
 
-        /* 스마트폰 화면용 반응형 CSS */
+        /* ========= 스마트폰 화면용 반응형 CSS ========= */
         @media screen and (max-width: 768px) {
-            body { padding: 10px; }
+            body { padding: 5px; }
             
-            /* 고정된 A4 사이즈(210mm)를 화면 너비(100%)로 꽉 차게 변경 */
-            .toolbar, .page { 
-                width: 100%; 
-                padding: 10px; 
-                box-sizing: border-box; 
-            }
+            .toolbar, .page { width: 100%; padding: 15px; box-sizing: border-box; }
             
-            /* 상단 정보란: 좌우 배치를 위아래 배치로 변경 */
-            .info-section { 
-                flex-direction: column; 
-                gap: 20px; 
-            }
-            .info-left, .info-right { 
-                width: 100%; 
-            }
+            /* 로고 겹침 해결: 모바일에서는 로고를 가운데 위로 배치 */
+            .page > div:first-child { position: static !important; text-align: center; margin-bottom: 15px; }
+            .page > div:first-child img { height: 40px !important; }
+            .doc-title { margin-bottom: 20px; font-size: 28px; }
             
-            /* 견적 항목 테이블: 가로로 스크롤 할 수 있도록 변경 (내용이 찌그러지지 않음) */
-            .main-table { 
-                display: block; 
-                overflow-x: auto; 
-                white-space: nowrap; 
-            }
+            .info-section { flex-direction: column; gap: 20px; }
+            .info-left, .info-right { width: 100%; }
             
-            /* 총 합계 박스 위아래 배치 */
-            .amount-box { 
-                flex-direction: column; 
-                text-align: center; 
-                gap: 10px; 
-            }
+            /* 표 겹침 해결: 가로로 스크롤 가능하게 풀기 */
+            .main-table { display: block; overflow-x: auto; white-space: nowrap; table-layout: auto !important; }
+            .main-table th, .main-table td { width: auto !important; padding: 5px 10px; }
             
-            /* 하단 비고란 테이블 위아래 배치 */
-            .remarks-section table, .remarks-section tbody, .remarks-section tr, .remarks-section td { 
-                display: block; 
-                width: 100%; 
-            }
-            .remarks-section td { 
-                padding: 2px 0; 
-            }
-            .remarks-section input[type="text"] {
-                margin-bottom: 5px;
-            }
+            .amount-box { flex-direction: column; text-align: center; gap: 10px; font-size: 14px; }
+            
+            .remarks-section table, .remarks-section tbody, .remarks-section tr, .remarks-section td { display: block; width: 100%; }
+            .remarks-section td { padding: 2px 0; }
+            .remarks-section input[type="text"] { margin-bottom: 5px; }
         }
     </style>
 </head>
@@ -268,10 +267,8 @@
 </div>
 
 <script>
-    // 자동 생성된 비고 텍스트를 추적 (직접 수정 방지용)
     window.lastAutoRemarks = "";
 
-    // [파일명 자동 생성 로직]
     function prepareAndPrint() {
         const customer = document.getElementById('customerName').value || "고객사명";
         const qDate = document.getElementById('quoteDate').value || "날짜미입력";
@@ -329,7 +326,6 @@
         msgDiv.innerText = prodMap[firstRowSel.value] || "";
     }
 
-    // [비고란 자동 생성 로직 - NAC/ZTNA 병합 포함]
     function updateRemarksText() {
         let hasMDR = false, mdrCycle = "연";
         let hasNAC = false, nacCycle = "연";
@@ -357,24 +353,21 @@
             parts.push(`[Genian MDR]\n- ${mdrCycle} 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
         }
         
-        // NAC와 PA가 함께 있는 경우 단일 블록으로 합치기
         if (hasNAC && hasPA) {
             parts.push(`[Cloud ZTNA]\n- ${nacCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- PA 라이선스는 SSL VPN 동시 접속자 기준`);
-        } else if (hasNAC) { // NAC만 있는 경우
+        } else if (hasNAC) { 
             parts.push(`[Cloud NAC]\n- ${nacCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
-        } else if (hasPA) { // PA만 있는 경우
+        } else if (hasPA) { 
             parts.push(`[Cloud ZTNA (PA)]\n- ${paCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
         }
 
         const autoStr = parts.join('\n\n');
         const textarea = document.querySelector('.remarks-section textarea');
         
-        // 사용자가 직접 입력한 값이 있으면(값이 다르면) 덮어씌우지 않음
         if (textarea.value.trim() === "" || textarea.value === window.lastAutoRemarks) {
             textarea.value = autoStr;
             window.lastAutoRemarks = autoStr;
             
-            // 텍스트 길이에 맞춰 박스 높이 자동 조절
             textarea.style.height = "auto";
             if(autoStr !== "") {
                 textarea.style.height = (textarea.scrollHeight + 5) + "px";
