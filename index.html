@@ -20,13 +20,11 @@
         input, select, textarea { width: 100%; border: none; outline: none; font-family: inherit; font-size: inherit; background: transparent; padding: 2px; }
         select { border: 1px solid #ccc; background: #fff; border-radius: 3px; padding: 4px; font-size: 11px; }
         
-        /* 로고 영역 스타일 분리 */
         .logo-box { position: absolute; top: 15mm; left: 15mm; }
         .logo-box img { height: 35px; object-fit: contain; }
 
         .doc-title { font-size: 36px; font-weight: 900; text-align: center; letter-spacing: 15px; text-decoration: underline; text-underline-offset: 10px; margin-bottom: 30px; }
         
-        /* 상단 정보 섹션 */
         .info-section { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px; }
         .info-left { width: 45%; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding-bottom: 5px; }
         .info-left .input-line { border-bottom: 1px solid #aaa; border-radius: 0; padding-left: 5px; }
@@ -37,8 +35,8 @@
         .info-right th { background: #f0f0f0; font-weight: bold; }
         .info-right .provider-title { writing-mode: vertical-rl; text-orientation: upright; width: 30px; letter-spacing: 5px; font-size: 13px; }
         
-        /* 테이블 반응형을 위한 래퍼 추가 */
-        .table-responsive { width: 100%; overflow-x: auto; }
+        /* PC 웹에서는 100% 너비만 차지하고 스크롤바는 생기지 않도록 수정 */
+        .table-responsive { width: 100%; }
         .main-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border-color); font-size: 11px; table-layout: fixed; }
         .main-table th { background: var(--genians-green); color: white; height: 35px; border: 1px solid var(--genians-green); }
         .main-table td { border: 1px solid #ccc; height: 40px; padding: 2px; text-align: center; }
@@ -47,7 +45,6 @@
 
         .amount-box { margin-top: 15px; border: 2px solid var(--border-color); padding: 15px; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; background: #fdfdfd; }
         
-        /* 하단 비고 섹션 */
         .remarks-section { margin-top: 25px; font-size: 12px; }
         .remarks-section table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .remarks-section td { padding: 5px; vertical-align: middle; }
@@ -57,46 +54,56 @@
         .only-print { display: none; }
         .print-text { display: none; }
 
-        /* ========================================= */
-        /* [PC & 모바일 공통] 인쇄(PDF) 출력 시 강제 A4 설정 */
-        /* ========================================= */
+        /* ==================================================================== */
+        /* [PDF 출력용] 1장 강제 출력 & 두 줄 겹침 방지 */
+        /* ==================================================================== */
         @media print {
             @page { size: A4 portrait; margin: 0; }
-            body { background: none !important; padding: 0 !important; margin: 0 !important; min-width: 210mm !important; }
+            html, body { 
+                width: 210mm !important; 
+                height: 297mm !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                background: #fff !important; 
+                overflow: hidden !important; 
+            }
             
-            /* 모바일 브라우저에서도 무조건 210mm로 그리도록 강제 */
             .page { 
                 width: 210mm !important; 
+                height: 297mm !important; 
                 min-height: 297mm !important; 
                 margin: 0 auto !important; 
                 padding: 15mm !important; 
                 box-shadow: none !important; 
                 position: relative !important;
+                box-sizing: border-box !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                overflow: hidden !important;
             }
+
             .toolbar, .btn-del, .no-print { display: none !important; }
             .only-print { display: block !important; }
             .print-text { display: block !important; }
             
-            /* 로고 및 제목 원상복구 */
             .logo-box { position: absolute !important; top: 15mm !important; left: 15mm !important; text-align: left !important; display: block !important; margin: 0 !important; }
             .doc-title { margin-top: 0 !important; margin-bottom: 30px !important; font-size: 36px !important; text-align: center !important; }
             
-            /* 레이아웃 원상복구 */
-            .info-section { display: flex !important; flex-direction: row !important; gap: 0 !important; }
-            .info-left { width: 45% !important; }
-            .info-right { width: 50% !important; }
+            .info-section { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; gap: 0 !important; }
+            .info-left { width: 45% !important; flex: 0 0 45% !important; display: flex !important; flex-direction: column !important; justify-content: flex-end !important; }
+            .info-right { width: 50% !important; flex: 0 0 50% !important; }
             
-            /* 테이블 스크롤 풀고 A4 크기에 맞춤 */
-            .table-responsive { overflow: visible !important; width: 100% !important; }
-            .main-table { min-width: auto !important; display: table !important; width: 100% !important; table-layout: fixed !important; white-space: normal !important; }
-            .main-table th, .main-table td { width: auto !important; padding: 2px !important; }
+            /* 테이블 강제 너비 해제: 기존 HTML의 17%, 12% 비율 유지하고 한 줄로 강제 출력 */
+            .table-responsive { overflow: visible !important; width: 100% !important; display: block !important; }
+            .main-table { display: table !important; width: 100% !important; table-layout: fixed !important; }
+            .main-table th, .main-table td { padding: 2px !important; white-space: nowrap !important; } 
             
-            .amount-box { display: flex !important; flex-direction: row !important; text-align: left !important; }
+            .amount-box { display: flex !important; flex-direction: row !important; text-align: left !important; justify-content: space-between !important; }
             
-            .remarks-section table { display: table !important; width: 100% !important; }
-            .remarks-section tbody, .remarks-section tr { display: table-row-group !important; width: 100% !important; }
-            .remarks-section tr { display: table-row !important; }
-            .remarks-section td { display: table-cell !important; padding: 5px !important; }
+            .remarks-section table { display: table !important; width: 100% !important; table-layout: fixed !important; }
+            .remarks-section tbody { display: table-row-group !important; width: 100% !important; }
+            .remarks-section tr { display: table-row !important; width: 100% !important; }
+            .remarks-section td { display: table-cell !important; padding: 5px !important; width: auto !important; }
             
             input::placeholder, textarea::placeholder { color: transparent; }
             .info-left .input-line, input, textarea { border: none !important; background: transparent !important; }
@@ -106,24 +113,22 @@
             .provider-title { white-space: nowrap !important; }
         }
 
-        /* ========================================= */
-        /* [스마트폰 전용] 화면에서만 적용되는 보기 편한 모드 */
-        /* ========================================= */
+        /* ==================================================================== */
+        /* [스마트폰 전용] 좁은 화면에서만 테이블 스크롤바 생성 */
+        /* ==================================================================== */
         @media screen and (max-width: 768px) {
             body { padding: 5px; }
-            
             .toolbar, .page { width: 100%; padding: 15px; box-sizing: border-box; min-height: auto; }
             
-            /* 로고 겹침 해결: 앱처럼 화면 중앙 상단에 배치 */
             .logo-box { position: relative; top: 0; left: 0; text-align: center; margin-bottom: 15px; }
             .doc-title { margin-top: 0; margin-bottom: 20px; font-size: 28px; }
             
-            /* 상단 정보 위아래로 분리 */
             .info-section { flex-direction: column; gap: 20px; }
             .info-left, .info-right { width: 100%; }
             
-            /* 테이블 찌그러짐 방지: 너비를 보장하고 가로로 스크롤 허용 */
-            .main-table { min-width: 800px; /* 테이블이 찌그러지지 않는 최소 너비 */ }
+            /* 모바일 화면에서만 가로 스크롤 허용 */
+            .table-responsive { overflow-x: auto; }
+            .main-table { min-width: 800px; }
             
             .amount-box { flex-direction: column; text-align: center; gap: 10px; font-size: 14px; }
             
@@ -291,10 +296,12 @@
 </div>
 
 <script>
-    // 자바스크립트는 기존과 동일하게 유지됩니다.
     window.lastAutoRemarks = "";
 
     function prepareAndPrint() {
+        // 인쇄 전 가장 최신 정보로 계산 및 텍스트 전환
+        calcAll();
+
         const customer = document.getElementById('customerName').value || "고객사명";
         const qDate = document.getElementById('quoteDate').value || "날짜미입력";
         
@@ -636,7 +643,9 @@
             }
 
             tr.querySelectorAll('select').forEach(sel => {
-                sel.nextElementSibling.innerText = sel.options[sel.selectedIndex].text;
+                if(sel.selectedIndex >= 0) {
+                    sel.nextElementSibling.innerText = sel.options[sel.selectedIndex].text;
+                }
             });
 
             grandVal += subTotal;
