@@ -21,7 +21,7 @@
         
         .doc-title { font-size: 36px; font-weight: 900; text-align: center; letter-spacing: 15px; text-decoration: underline; text-underline-offset: 10px; margin-bottom: 30px; }
         
-        /* 상단 정보 섹션 (고객사 / 공급자) */
+        /* 상단 정보 섹션 */
         .info-section { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px; }
         .info-left { width: 45%; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding-bottom: 5px; }
         .info-left .input-line { border-bottom: 1px solid #aaa; border-radius: 0; padding-left: 5px; }
@@ -45,7 +45,6 @@
         .remarks-section table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .remarks-section td { padding: 5px; vertical-align: middle; }
         .remarks-section input { font-size: 11px; width: 100%; text-align: left; } 
-        /* 비고란 높이 확장 및 줄간격 조정 */
         .remarks-section textarea { width: 100%; height: 120px; resize: none; border: 1px solid #eee; padding: 5px; font-size: 11px; font-family: inherit; line-height: 1.5; }
 
         .only-print { display: none; }
@@ -71,7 +70,7 @@
     <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v2.6</div>
     <div>
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
-        <button class="btn btn-print" onclick="window.print()">견적서 발행 (PDF)</button>
+        <button class="btn btn-print" onclick="prepareAndPrint()">견적서 발행 (PDF)</button>
     </div>
 </div>
 
@@ -85,7 +84,7 @@
     <div class="info-section">
         <div class="info-left">
             <div style="font-size: 18px; font-weight: bold; display: flex; align-items: flex-end; margin-bottom: 5px;">
-                <input type="text" style="width: 100%; font-size: 20px; font-weight: 900; border-bottom: 2px solid #000; text-align: left; padding: 0 5px;" placeholder="고객사명">
+                <input type="text" id="customerName" style="width: 100%; font-size: 20px; font-weight: 900; border-bottom: 2px solid #000; text-align: left; padding: 0 5px;" placeholder="고객사명">
             </div>
             <div style="display: flex; align-items: center;">
                 <span style="width: 60px; font-weight: bold;">담당자</span>
@@ -144,7 +143,8 @@
                 <th style="width: 12%;">계약 기간</th>
                 <th style="width: 11%;">납부 주기</th>
                 <th style="width: 11%;">소비자 단가(₩)</th>
-                <th style="width: 8%;">수량</th> <th style="width: 11%;">제안 단가(₩)</th>
+                <th style="width: 8%;">수량</th> 
+                <th style="width: 11%;">제안 단가(₩)</th>
                 <th style="width: 12%;">공급 제안가(₩)</th>
                 <th style="width: 10%;">세액(₩)</th>
                 <th style="width: 8%;">비고</th>
@@ -198,6 +198,42 @@
 </div>
 
 <script>
+    // [파일명 자동 생성 로직]
+    function prepareAndPrint() {
+        const customer = document.getElementById('customerName').value || "고객사명";
+        const qDate = document.getElementById('quoteDate').value || "날짜미입력";
+        
+        const firstRow = document.querySelector('#itemTable tbody tr');
+        let prodLabel = "견적서";
+        let qty = "0";
+        let unit = "User";
+
+        if (firstRow) {
+            const prodValue = firstRow.querySelector('.product-sel').value;
+            const qtyValue = firstRow.querySelector('.qty').value;
+            qty = qtyValue || "0";
+
+            // 상품명 매핑 (MDR 계열 vs Cloud 계열)
+            if (prodValue.includes("MDR") || prodValue.includes("AV") || prodValue.includes("Ransomware") || prodValue.includes("Device")) {
+                prodLabel = "Genian MDR(서비스형)";
+                unit = "User";
+            } else if (prodValue.includes("NAC") || prodValue.includes("ZTNA")) {
+                prodLabel = prodValue.includes("NAC") ? "Genian Cloud NAC(서비스형)" : "Genian Cloud ZTNA(서비스형)";
+                unit = "Node";
+            } else {
+                prodLabel = prodValue || "견적서비스";
+            }
+        }
+
+        // 파일명 조합: 2026-05-14_고객사명_서비스명_100User_견적서(지니언스)
+        const fileName = `${qDate}_${customer}_${prodLabel}_${qty}${unit}_견적서(지니언스)`;
+        
+        const originalTitle = document.title;
+        document.title = fileName; // <title>을 파일명으로 일시 변경
+        window.print();
+        document.title = originalTitle; // 인쇄 후 원래 제목으로 복구
+    }
+
     function updateQuoteMessage() {
         const firstRowSel = document.querySelector('#itemTable tbody tr:first-child .product-sel');
         const msgDiv = document.getElementById('quoteMessage');
