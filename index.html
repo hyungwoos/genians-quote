@@ -45,7 +45,8 @@
         .remarks-section table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .remarks-section td { padding: 5px; vertical-align: middle; }
         .remarks-section input { font-size: 11px; width: 100%; text-align: left; } 
-        .remarks-section textarea { width: 100%; height: 60px; resize: none; border: 1px solid #eee; padding: 5px; font-size: 11px; font-family: inherit; }
+        /* 비고란 높이 확장 및 줄간격 조정 */
+        .remarks-section textarea { width: 100%; height: 120px; resize: none; border: 1px solid #eee; padding: 5px; font-size: 11px; font-family: inherit; line-height: 1.5; }
 
         .only-print { display: none; }
         .print-text { display: none; }
@@ -110,7 +111,7 @@
                 </tr>
                 <tr>
                     <th>주소</th>
-                    <td colspan="3" style="text-align: left; padding-left: 10px;">경기도 안양시 동안구 벌말로 66, 평촌역하이필드 A동 11층</td>
+                    <td colspan="3" style="text-align: left; padding-left: 10px; line-height: 1.4;">경기도 안양시 동안구 벌말로 66, 평촌역하이필드<br>A동 12층</td>
                 </tr>
                 <tr>
                     <th>홈페이지</th>
@@ -139,15 +140,14 @@
     <table class="main-table" id="itemTable">
         <thead>
             <tr>
-                <th style="width: 18%;">서비스 선택</th>
+                <th style="width: 17%;">서비스 선택</th>
                 <th style="width: 12%;">계약 기간</th>
                 <th style="width: 11%;">납부 주기</th>
                 <th style="width: 11%;">소비자 단가(₩)</th>
-                <th style="width: 6%;">수량</th>
-                <th style="width: 11%;">제안 단가(₩)</th>
+                <th style="width: 8%;">수량</th> <th style="width: 11%;">제안 단가(₩)</th>
                 <th style="width: 12%;">공급 제안가(₩)</th>
                 <th style="width: 10%;">세액(₩)</th>
-                <th style="width: 9%;">비고</th>
+                <th style="width: 8%;">비고</th>
             </tr>
         </thead>
         <tbody>
