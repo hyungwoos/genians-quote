@@ -45,7 +45,7 @@
         .remarks-section table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .remarks-section td { padding: 5px; vertical-align: middle; }
         .remarks-section input { font-size: 11px; width: 100%; text-align: left; } 
-        .remarks-section textarea { width: 100%; height: 120px; resize: none; border: 1px solid #eee; padding: 5px; font-size: 11px; font-family: inherit; line-height: 1.5; }
+        .remarks-section textarea { width: 100%; min-height: 120px; resize: none; border: 1px solid #eee; padding: 5px; font-size: 11px; font-family: inherit; line-height: 1.5; overflow: hidden; }
 
         .only-print { display: none; }
         .print-text { display: none; }
@@ -60,7 +60,7 @@
             .info-left .input-line, input, textarea { border: none !important; }
             input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
             select { display: none !important; }
-            .remarks-section textarea { border: none !important; resize: none; overflow: hidden; }
+            .remarks-section textarea { border: none !important; }
         }
     </style>
 </head>
@@ -190,7 +190,7 @@
                     <input type="text" value="비       고:" style="font-weight: bold; letter-spacing: 2px;">
                 </td>
                 <td colspan="3" style="padding-top: 10px;">
-                    <textarea placeholder="추가적인 내용을 입력하세요. (출력 시 테두리는 보이지 않습니다.)"></textarea>
+                    <textarea placeholder="추가적인 내용을 입력하세요. (출력 시 테두리는 보이지 않습니다.)" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; window.lastAutoRemarks = 'modified';"></textarea>
                 </td>
             </tr>
         </table>
@@ -198,6 +198,9 @@
 </div>
 
 <script>
+    // 자동 생성된 비고 텍스트를 추적 (직접 수정 방지용)
+    window.lastAutoRemarks = "";
+
     // [파일명 자동 생성 로직]
     function prepareAndPrint() {
         const customer = document.getElementById('customerName').value || "고객사명";
@@ -213,7 +216,6 @@
             const qtyValue = firstRow.querySelector('.qty').value;
             qty = qtyValue || "0";
 
-            // 상품명 매핑 (MDR 계열 vs Cloud 계열)
             if (prodValue.includes("MDR") || prodValue.includes("AV") || prodValue.includes("Ransomware") || prodValue.includes("Device")) {
                 prodLabel = "Genian MDR(서비스형)";
                 unit = "User";
@@ -225,13 +227,15 @@
             }
         }
 
-        // 파일명 조합: 2026-05-14_고객사명_서비스명_100User_견적서(지니언스)
         const fileName = `${qDate}_${customer}_${prodLabel}_${qty}${unit}_견적서(지니언스)`;
-        
         const originalTitle = document.title;
-        document.title = fileName; // <title>을 파일명으로 일시 변경
-        window.print();
-        document.title = originalTitle; // 인쇄 후 원래 제목으로 복구
+        
+        document.title = fileName; 
+
+        setTimeout(function() {
+            window.print();
+            document.title = originalTitle; 
+        }, 100);
     }
 
     function updateQuoteMessage() {
@@ -253,6 +257,61 @@
         };
         
         msgDiv.innerText = prodMap[firstRowSel.value] || "";
+    }
+
+    // [비고란 자동 생성 로직 - 수정됨]
+    function updateRemarksText() {
+        let hasMDR = false, mdrCycle = "연";
+        let hasNAC = false, nacCycle = "연";
+        let hasPA = false, paCycle = "연";
+
+        const rows = document.querySelectorAll('#itemTable tbody tr');
+        rows.forEach(tr => {
+            const prod = tr.querySelector('.product-sel').value;
+            if (!prod) return;
+            const billing = tr.querySelector('.billing-sel').value;
+            const cycleStr = (billing === "1") ? "월" : "연";
+
+            if (prod.includes("MDR") || prod.includes("AV") || prod.includes("Ransomware") || prod.includes("Device")) {
+                hasMDR = true; mdrCycle = cycleStr;
+            } else if (prod.includes("NAC")) {
+                hasNAC = true; nacCycle = cycleStr;
+            } else if (prod.includes("ZTNA") || prod.includes("PA")) {
+                hasPA = true; paCycle = cycleStr;
+            }
+        });
+
+        let parts = [];
+
+        if (hasMDR) {
+            parts.push(`[Genian MDR]\n- ${mdrCycle} 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
+        }
+        
+        // NAC와 PA가 함께 있는 경우 단일 블록으로 합치기
+        if (hasNAC && hasPA) {
+            parts.push(`[Cloud ZTNA]\n- ${nacCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- PA 라이선스는 SSL VPN 동시 접속자 기준`);
+        } else if (hasNAC) { // NAC만 있는 경우
+            parts.push(`[Cloud NAC]\n- ${nacCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
+        } else if (hasPA) { // PA만 있는 경우
+            parts.push(`[Cloud ZTNA (PA)]\n- ${paCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
+        }
+
+        const autoStr = parts.join('\n\n');
+        const textarea = document.querySelector('.remarks-section textarea');
+        
+        // 사용자가 직접 입력한 값이 있으면(값이 다르면) 덮어씌우지 않음
+        if (textarea.value.trim() === "" || textarea.value === window.lastAutoRemarks) {
+            textarea.value = autoStr;
+            window.lastAutoRemarks = autoStr;
+            
+            // 텍스트 길이에 맞춰 박스 높이 자동 조절
+            textarea.style.height = "auto";
+            if(autoStr !== "") {
+                textarea.style.height = (textarea.scrollHeight + 5) + "px";
+            } else {
+                textarea.style.height = "120px";
+            }
+        }
     }
 
     function updateManagerInfo() {
@@ -408,6 +467,7 @@
         `;
         tbody.appendChild(tr);
         updateQuoteMessage(); 
+        updateRemarksText();
     }
 
     function updateOptions(selectElem) {
@@ -500,6 +560,7 @@
         document.getElementById('txtGrandTotal').innerText = amtToKor(totalAmt);
         
         updateQuoteMessage(); 
+        updateRemarksText(); 
     }
 
     function amtToKor(num) {
