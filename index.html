@@ -66,6 +66,28 @@
 </head>
 <body>
 
+<div id="loginOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #525659; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; width: 300px;">
+        <img src="Logo.jpg" alt="Genians" style="height: 40px; margin-bottom: 20px;">
+        <h3 style="margin: 0 0 20px 0; color: #333;">견적 시스템 접속</h3>
+        <input type="password" id="pwInput" placeholder="비밀번호를 입력하세요" onkeypress="if(event.key==='Enter') checkPassword()" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; box-sizing: border-box; text-align: center;">
+        <button onclick="checkPassword()" style="width: 100%; padding: 10px; background: var(--genians-green); color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 15px; cursor: pointer;">접 속</button>
+    </div>
+</div>
+<script>
+    function checkPassword() {
+        const secureKey = "MUdlbmlka3Mh"; 
+        const input = document.getElementById('pwInput').value;
+
+        if (btoa(input) === secureKey) {
+            document.getElementById('loginOverlay').style.display = 'none';
+        } else {
+            alert('비밀번호가 일치하지 않습니다.');
+            document.getElementById('pwInput').value = '';
+            document.getElementById('pwInput').focus();
+        }
+    }
+</script>
 <div class="toolbar">
     <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v2.6</div>
     <div>
@@ -259,7 +281,7 @@
         msgDiv.innerText = prodMap[firstRowSel.value] || "";
     }
 
-    // [비고란 자동 생성 로직 - 수정됨]
+    // [비고란 자동 생성 로직 - NAC/ZTNA 병합 포함]
     function updateRemarksText() {
         let hasMDR = false, mdrCycle = "연";
         let hasNAC = false, nacCycle = "연";
