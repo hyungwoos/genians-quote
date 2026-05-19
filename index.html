@@ -359,16 +359,18 @@
     }
 
     function updateRemarksText() {
-        let hasMDR = false, mdrCycle = "연";
-        let hasNAC = false, nacCycle = "연";
-        let hasPA = false, paCycle = "연";
+        let hasMDR = false, mdrCycle = "";
+        let hasNAC = false, nacCycle = "";
+        let hasPA = false, paCycle = "";
 
         const rows = document.querySelectorAll('#itemTable tbody tr');
         rows.forEach(tr => {
             const prod = tr.querySelector('.product-sel').value;
             if (!prod || prod === "direct") return; 
-            const billing = tr.querySelector('.billing-sel').value;
             
+            const billing = tr.querySelector('.billing-sel').value;
+            if (!billing) return; // 납부 주기가 선택되지 않으면 비고란 자동생성 보류
+
             let cycleStr = "연";
             if (billing === "1") cycleStr = "월";
             else if (billing === "lump") cycleStr = "일시납";
@@ -384,16 +386,19 @@
 
         let parts = [];
 
+        // 일시납 여부에 따른 출력 문구 함수
+        const getMethodStr = (cycle) => cycle === "일시납" ? "- 약정 일시납 조건" : `- ${cycle} 구독 서비스 방식`;
+
         if (hasMDR) {
-            parts.push(`[Genian MDR]\n- ${mdrCycle} 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
+            parts.push(`[Genian MDR]\n${getMethodStr(mdrCycle)}\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
         }
         
         if (hasNAC && hasPA) {
-            parts.push(`[Cloud ZTNA]\n- ${nacCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- PA 라이선스는 SSL VPN 동시 접속자 기준`);
+            parts.push(`[Cloud ZTNA]\n${getMethodStr(nacCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- PA 라이선스는 SSL VPN 동시 접속자 기준`);
         } else if (hasNAC) { 
-            parts.push(`[Cloud NAC]\n- ${nacCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
+            parts.push(`[Cloud NAC]\n${getMethodStr(nacCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
         } else if (hasPA) { 
-            parts.push(`[Cloud ZTNA (PA)]\n- ${paCycle} 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
+            parts.push(`[Cloud ZTNA (PA)]\n${getMethodStr(paCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
         }
 
         const autoStr = parts.join('\n\n');
@@ -570,8 +575,9 @@
             </td>
             <td style="vertical-align: middle;">
                 <select class="billing-sel no-print" onchange="calcAll()">
+                    <option value="">-- 납부 주기 --</option>
                     <option value="lump">일시납</option>
-                    <option value="12" selected>연납(1년)</option>
+                    <option value="12">연납(1년)</option>
                     <option value="1">월납</option>
                 </select>
                 <div class="print-text"></div>
@@ -665,7 +671,7 @@
             
             const billingVal = tr.querySelector('.billing-sel').value;
             const isLumpSum = (billingVal === 'lump');
-            const billingMulti = parseInt(billingVal) || 1;
+            const billingMulti = parseInt(billingVal) || 1; // 연납, 월납 곱하기용
             
             const qty = parseInt(tr.querySelector('.qty').value) || 0;
             
@@ -677,7 +683,8 @@
             if (prodName === 'direct') {
                 const cPriceInput = tr.querySelector('.consumer-price').value.replace(/,/g, '');
                 consumerPrice = parseInt(cPriceInput) || 0;
-            } else if (prodName && term && qty > 0) {
+            // 모든 필수 항목(서비스, 기간, 납부주기)이 선택되어야만 금액을 계산함
+            } else if (prodName && term && billingVal !== "" && qty > 0) {
                 const db = pricingDB[prodName];
                 
                 let tier = db.tiers.find(t => qty <= t.max);
@@ -729,22 +736,28 @@
             const prodPrint = prodSel.parentElement.querySelector('.print-text');
             if (prodSel.value === 'direct') {
                 prodPrint.innerText = tr.querySelector('.product-custom').value;
-            } else if (prodSel.selectedIndex >= 0) {
+            } else if (prodSel.selectedIndex > 0) {
                 prodPrint.innerText = prodSel.options[prodSel.selectedIndex].text;
+            } else {
+                prodPrint.innerText = "";
             }
 
             const termSel = tr.querySelector('.term-sel');
             const termPrint = termSel.parentElement.querySelector('.print-text');
             if (prodSel.value === 'direct') {
                 termPrint.innerText = tr.querySelector('.term-custom').value;
-            } else if (termSel.selectedIndex >= 0) {
+            } else if (termSel.selectedIndex > 0) {
                 termPrint.innerText = termSel.options[termSel.selectedIndex].text;
+            } else {
+                termPrint.innerText = "";
             }
 
             const billSel = tr.querySelector('.billing-sel');
             const billPrint = billSel.parentElement.querySelector('.print-text');
-            if (billSel.selectedIndex >= 0) {
+            if (billSel.value !== "" && billSel.selectedIndex >= 0) {
                 billPrint.innerText = billSel.options[billSel.selectedIndex].text;
+            } else {
+                billPrint.innerText = "";
             }
 
             grandVal += subTotal;
