@@ -39,9 +39,11 @@
         .table-responsive { width: 100%; }
         .main-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border-color); font-size: 11px; table-layout: fixed; }
         .main-table th { background: var(--genians-green); color: white; height: 35px; border: 1px solid var(--genians-green); }
-        .main-table td { border: 1px solid #ccc; height: 40px; padding: 2px; text-align: center; }
+        .main-table td { border: 1px solid #ccc; height: 40px; padding: 2px; text-align: center; vertical-align: middle; }
         .text-right { text-align: right !important; }
         .input-num { text-align: right; }
+
+        .custom-input { width: 100%; border: 1px solid #ccc; background: #fff; border-radius: 3px; padding: 4px; font-size: 11px; margin-top: 2px; box-sizing: border-box; }
 
         .amount-box { margin-top: 15px; border: 2px solid var(--border-color); padding: 15px; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; background: #fdfdfd; }
         
@@ -315,7 +317,10 @@
             const qtyValue = firstRow.querySelector('.qty').value;
             qty = qtyValue || "0";
 
-            if (prodValue.includes("MDR") || prodValue.includes("AV") || prodValue.includes("Ransomware") || prodValue.includes("Device")) {
+            if (prodValue === "direct") {
+                const customProd = firstRow.querySelector('.product-custom').value;
+                prodLabel = customProd || "직접입력_견적";
+            } else if (prodValue.includes("MDR") || prodValue.includes("AV") || prodValue.includes("Ransomware") || prodValue.includes("Device")) {
                 prodLabel = "Genian MDR(서비스형)";
                 unit = "User";
             } else if (prodValue.includes("NAC") || prodValue.includes("ZTNA")) {
@@ -352,10 +357,16 @@
             "GIER (Ransomware Service)": "Genian MDR(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "GIED (Device Control)": "Genian MDR(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud NAC V6.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
+            "Genian Cloud NAC V5.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud ZTNA (PA)": "Genian Cloud ZTNA(서비스형) 제안에 대하여 아래와 같이 견적 합니다."
         };
         
-        msgDiv.innerText = prodMap[firstRowSel.value] || "";
+        // 직접 입력인 경우는 안내 문구를 비우거나 자유롭게 타이핑할 수 있게 빈값을 줍니다.
+        if (firstRowSel.value === "direct") {
+            msgDiv.innerText = "제안에 대하여 아래와 같이 견적 합니다.";
+        } else {
+            msgDiv.innerText = prodMap[firstRowSel.value] || "";
+        }
     }
 
     function updateRemarksText() {
@@ -366,7 +377,7 @@
         const rows = document.querySelectorAll('#itemTable tbody tr');
         rows.forEach(tr => {
             const prod = tr.querySelector('.product-sel').value;
-            if (!prod) return;
+            if (!prod || prod === "direct") return; // 직접 입력은 자동 생성에서 제외
             const billing = tr.querySelector('.billing-sel').value;
             const cycleStr = (billing === "1") ? "월" : "연";
 
@@ -499,6 +510,25 @@
                 { max: 9999999, prices: { "무약정": 2700, "1년약정": 2700, "2년약정": 2700, "3년약정": 2700 } }
             ]
         },
+        "Genian Cloud NAC V5.0": {
+            type: "monthly",
+            tiers: [
+                { max: 100, prices: { "무약정": 16000, "1년약정": 16000, "2년약정": 16000, "3년약정": 16000 } },
+                { max: 200, prices: { "무약정": 10700, "1년약정": 10700, "2년약정": 10700, "3년약정": 10700 } },
+                { max: 300, prices: { "무약정": 8700, "1년약정": 8700, "2년약정": 8700, "3년약정": 8700 } },
+                { max: 400, prices: { "무약정": 7400, "1년약정": 7400, "2년약정": 7400, "3년약정": 7400 } },
+                { max: 500, prices: { "무약정": 6700, "1년약정": 6700, "2년약정": 6700, "3년약정": 6700 } },
+                { max: 600, prices: { "무약정": 6100, "1년약정": 6100, "2년약정": 6100, "3년약정": 6100 } },
+                { max: 700, prices: { "무약정": 5600, "1년약정": 5600, "2년약정": 5600, "3년약정": 5600 } },
+                { max: 800, prices: { "무약정": 5400, "1년약정": 5400, "2년약정": 5400, "3년약정": 5400 } },
+                { max: 900, prices: { "무약정": 5100, "1년약정": 5100, "2년약정": 5100, "3년약정": 5100 } },
+                { max: 1000, prices: { "무약정": 4900, "1년약정": 4900, "2년약정": 4900, "3년약정": 4900 } },
+                { max: 1500, prices: { "무약정": 3900, "1년약정": 3900, "2년약정": 3900, "3년약정": 3900 } },
+                { max: 2000, prices: { "무약정": 3300, "1년약정": 3300, "2년약정": 3300, "3년약정": 3300 } },
+                { max: 2500, prices: { "무약정": 2900, "1년약정": 2900, "2년약정": 2900, "3년약정": 2900 } },
+                { max: 9999999, prices: { "무약정": 2700, "1년약정": 2700, "2년약정": 2700, "3년약정": 2700 } }
+            ]
+        },
         "Cloud ZTNA (PA)": {
             type: "monthly",
             tiers: [
@@ -530,33 +560,36 @@
         const tr = document.createElement('tr');
         
         tr.innerHTML = `
-            <td>
-                <select class="product-sel" onchange="updateOptions(this);">
+            <td style="vertical-align: middle;">
+                <select class="product-sel no-print" onchange="updateOptions(this);">
                     <option value="">-- 서비스 선택 --</option>
                     ${Object.keys(pricingDB).map(name => `<option value="${name}">${name}</option>`).join('')}
+                    <option value="direct">직접 입력</option>
                 </select>
+                <input type="text" class="product-custom custom-input no-print" style="display:none;" placeholder="서비스명 직접입력" oninput="calcAll()">
                 <div class="print-text"></div>
             </td>
-            <td>
-                <select class="term-sel" onchange="calcAll()">
+            <td style="vertical-align: middle;">
+                <select class="term-sel no-print" onchange="calcAll()">
                     <option value="">-- 계약 기간 --</option>
                 </select>
+                <input type="text" class="term-custom custom-input no-print" style="display:none;" placeholder="기간 직접입력" oninput="calcAll()">
                 <div class="print-text"></div>
             </td>
-            <td>
-                <select class="billing-sel" onchange="calcAll()">
+            <td style="vertical-align: middle;">
+                <select class="billing-sel no-print" onchange="calcAll()">
                     <option value="12">연납(1년)</option>
                     <option value="1">월납</option>
                 </select>
                 <div class="print-text"></div>
             </td>
-            <td><input type="text" class="consumer-price input-num text-right" readonly placeholder="자동계산"></td>
+            <td><input type="text" class="consumer-price input-num text-right" readonly placeholder="자동계산" oninput="formatCurrency(this)"></td>
             <td><input type="number" class="qty input-num" value="1" oninput="calcAll()" style="display: none; width: 100%;"></td>
             <td><input type="text" class="proposed-price input-num text-right" oninput="formatCurrency(this)" placeholder="직접입력"></td>
             <td><input type="text" class="row-total input-num text-right" readonly></td>
             <td><input type="text" class="row-vat input-num text-right" readonly></td>
             <td style="position:relative;">
-                <input type="text">
+                <input type="text" style="width: 100%; border: none; text-align: center;">
                 <button class="btn-del" onclick="this.closest('tr').remove(); calcAll();" style="position:absolute; right:-25px; top:10px; background:red; color:white; border:none; border-radius:50%; cursor:pointer; width:20px; height:20px; font-size:10px;">X</button>
             </td>
         `;
@@ -571,11 +604,41 @@
         const qtyInput = tr.querySelector('.qty');
         const prodName = selectElem.value;
         
+        const prodCustom = tr.querySelector('.product-custom');
+        const termCustom = tr.querySelector('.term-custom');
+        const consumerPrice = tr.querySelector('.consumer-price');
+
         termSel.innerHTML = '<option value="">-- 계약 기간 --</option>';
-        
+
+        if (prodName === 'direct') {
+            // 직접입력 모드
+            prodCustom.style.display = 'block';
+            termSel.style.display = 'none';
+            termCustom.style.display = 'block';
+            qtyInput.style.display = 'inline-block';
+            
+            consumerPrice.removeAttribute('readonly');
+            consumerPrice.placeholder = "직접입력";
+            
+            consumerPrice.value = "";
+            tr.querySelector('.proposed-price').value = "";
+            tr.querySelector('.row-total').value = "";
+            tr.querySelector('.row-vat').value = "";
+            calcAll();
+            return;
+        } else {
+            // 선택 모드 원복
+            prodCustom.style.display = 'none';
+            termSel.style.display = 'inline-block';
+            termCustom.style.display = 'none';
+            
+            consumerPrice.setAttribute('readonly', 'readonly');
+            consumerPrice.placeholder = "자동계산";
+        }
+
         if(!prodName) {
             qtyInput.style.display = 'none';
-            tr.querySelector('.consumer-price').value = "";
+            consumerPrice.value = "";
             tr.querySelector('.proposed-price').value = "";
             tr.querySelector('.row-total').value = "";
             tr.querySelector('.row-vat').value = "";
@@ -619,7 +682,10 @@
 
             let consumerPrice = 0;
 
-            if (prodName && term && qty > 0) {
+            if (prodName === 'direct') {
+                const cPriceInput = tr.querySelector('.consumer-price').value.replace(/,/g, '');
+                consumerPrice = parseInt(cPriceInput) || 0;
+            } else if (prodName && term && qty > 0) {
                 const db = pricingDB[prodName];
                 
                 let tier = db.tiers.find(t => qty <= t.max);
@@ -636,17 +702,40 @@
             const subTotal = proposedPrice * qty;
             const vat = Math.floor(subTotal * 0.1);
 
-            if(prodName) {
+            if(prodName === 'direct') {
+                if(consumerPrice > 0) {
+                    tr.querySelector('.consumer-price').value = consumerPrice.toLocaleString();
+                }
+                tr.querySelector('.row-total').value = subTotal ? subTotal.toLocaleString() : "";
+                tr.querySelector('.row-vat').value = vat ? vat.toLocaleString() : "";
+            } else if(prodName) {
                 tr.querySelector('.consumer-price').value = consumerPrice ? consumerPrice.toLocaleString() : "";
                 tr.querySelector('.row-total').value = subTotal ? subTotal.toLocaleString() : "";
                 tr.querySelector('.row-vat').value = vat ? vat.toLocaleString() : "";
             }
 
-            tr.querySelectorAll('select').forEach(sel => {
-                if(sel.selectedIndex >= 0) {
-                    sel.nextElementSibling.innerText = sel.options[sel.selectedIndex].text;
-                }
-            });
+            // PDF 인쇄 텍스트 전환
+            const prodSel = tr.querySelector('.product-sel');
+            const prodPrint = prodSel.parentElement.querySelector('.print-text');
+            if (prodSel.value === 'direct') {
+                prodPrint.innerText = tr.querySelector('.product-custom').value;
+            } else if (prodSel.selectedIndex >= 0) {
+                prodPrint.innerText = prodSel.options[prodSel.selectedIndex].text;
+            }
+
+            const termSel = tr.querySelector('.term-sel');
+            const termPrint = termSel.parentElement.querySelector('.print-text');
+            if (prodSel.value === 'direct') {
+                termPrint.innerText = tr.querySelector('.term-custom').value;
+            } else if (termSel.selectedIndex >= 0) {
+                termPrint.innerText = termSel.options[termSel.selectedIndex].text;
+            }
+
+            const billSel = tr.querySelector('.billing-sel');
+            const billPrint = billSel.parentElement.querySelector('.print-text');
+            if (billSel.selectedIndex >= 0) {
+                billPrint.innerText = billSel.options[billSel.selectedIndex].text;
+            }
 
             grandVal += subTotal;
             grandVat += vat;
