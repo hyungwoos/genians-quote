@@ -368,7 +368,10 @@
             const prod = tr.querySelector('.product-sel').value;
             if (!prod || prod === "direct") return; 
             const billing = tr.querySelector('.billing-sel').value;
-            const cycleStr = (billing === "1") ? "월" : "연";
+            
+            let cycleStr = "연";
+            if (billing === "1") cycleStr = "월";
+            else if (billing === "lump") cycleStr = "일시납";
 
             if (prod.includes("MDR") || prod.includes("AV") || prod.includes("Ransomware") || prod.includes("Device")) {
                 hasMDR = true; mdrCycle = cycleStr;
@@ -567,7 +570,8 @@
             </td>
             <td style="vertical-align: middle;">
                 <select class="billing-sel no-print" onchange="calcAll()">
-                    <option value="12">연납(1년)</option>
+                    <option value="lump">일시납</option>
+                    <option value="12" selected>연납(1년)</option>
                     <option value="1">월납</option>
                 </select>
                 <div class="print-text"></div>
@@ -600,7 +604,6 @@
         termSel.innerHTML = '<option value="">-- 계약 기간 --</option>';
 
         if (prodName === 'direct') {
-            // 직접입력 모드: 기존 select를 숨기고 그 자리에 input 표시
             selectElem.style.display = 'none'; 
             prodCustom.style.display = 'block';
             
@@ -659,7 +662,11 @@
             const prodSel = tr.querySelector('.product-sel');
             const prodName = prodSel.value;
             const term = tr.querySelector('.term-sel').value;
-            const billingMulti = parseInt(tr.querySelector('.billing-sel').value) || 1;
+            
+            const billingVal = tr.querySelector('.billing-sel').value;
+            const isLumpSum = (billingVal === 'lump');
+            const billingMulti = parseInt(billingVal) || 1;
+            
             const qty = parseInt(tr.querySelector('.qty').value) || 0;
             
             const proposedInput = tr.querySelector('.proposed-price').value.replace(/,/g, '');
@@ -678,8 +685,28 @@
 
                 let basePrice = tier.prices[term] || 0;
 
-                if(db.type === "monthly" && billingMulti === 12) basePrice *= 12;
-                if(db.type === "yearly" && billingMulti === 1) basePrice = Math.floor(basePrice / 12);
+                // 일시납인 경우 계약 약정 기간만큼 계산
+                if (isLumpSum) {
+                    let years = 1; // 무약정 및 1년약정의 기본값
+                    if (term.includes('2년')) years = 2;
+                    else if (term.includes('3년')) years = 3;
+                    else if (term.includes('4년')) years = 4;
+                    else if (term.includes('5년')) years = 5;
+
+                    if (db.type === "monthly") {
+                        if (term === '무약정') {
+                            basePrice *= 1; // 월단위 무약정의 일시납은 기본 1개월로 반영
+                        } else {
+                            basePrice *= (years * 12);
+                        }
+                    } else if (db.type === "yearly") {
+                        basePrice *= years;
+                    }
+                } else {
+                    // 기존 연납 / 월납 로직
+                    if(db.type === "monthly" && billingMulti === 12) basePrice *= 12;
+                    if(db.type === "yearly" && billingMulti === 1) basePrice = Math.floor(basePrice / 12);
+                }
 
                 consumerPrice = basePrice;
             }
