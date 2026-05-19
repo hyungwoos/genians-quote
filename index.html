@@ -35,7 +35,6 @@
         .info-right th { background: #f0f0f0; font-weight: bold; }
         .info-right .provider-title { writing-mode: vertical-rl; text-orientation: upright; width: 30px; letter-spacing: 5px; font-size: 13px; }
         
-        /* PC 웹에서는 100% 너비만 차지하고 스크롤바는 생기지 않도록 수정 */
         .table-responsive { width: 100%; }
         .main-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border-color); font-size: 11px; table-layout: fixed; }
         .main-table th { background: var(--genians-green); color: white; height: 35px; border: 1px solid var(--genians-green); }
@@ -43,7 +42,7 @@
         .text-right { text-align: right !important; }
         .input-num { text-align: right; }
 
-        .custom-input { width: 100%; border: 1px solid #ccc; background: #fff; border-radius: 3px; padding: 4px; font-size: 11px; margin-top: 2px; box-sizing: border-box; }
+        .custom-input { width: 100%; border: 1px solid #ccc; background: #fff; border-radius: 3px; padding: 4px; font-size: 11px; box-sizing: border-box; }
 
         .amount-box { margin-top: 15px; border: 2px solid var(--border-color); padding: 15px; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; background: #fdfdfd; }
         
@@ -56,9 +55,6 @@
         .only-print { display: none; }
         .print-text { display: none; }
 
-        /* ==================================================================== */
-        /* [PDF 출력용] 1장 강제 출력 & 두 줄 겹침 방지 */
-        /* ==================================================================== */
         @media print {
             @page { size: A4 portrait; margin: 0; }
             html, body { 
@@ -95,7 +91,6 @@
             .info-left { width: 45% !important; flex: 0 0 45% !important; display: flex !important; flex-direction: column !important; justify-content: flex-end !important; }
             .info-right { width: 50% !important; flex: 0 0 50% !important; }
             
-            /* 테이블 강제 너비 해제: 기존 HTML의 17%, 12% 비율 유지하고 한 줄로 강제 출력 */
             .table-responsive { overflow: visible !important; width: 100% !important; display: block !important; }
             .main-table { display: table !important; width: 100% !important; table-layout: fixed !important; }
             .main-table th, .main-table td { padding: 2px !important; white-space: nowrap !important; } 
@@ -115,9 +110,6 @@
             .provider-title { white-space: nowrap !important; }
         }
 
-        /* ==================================================================== */
-        /* [스마트폰 전용] 좁은 화면에서만 테이블 스크롤바 생성 */
-        /* ==================================================================== */
         @media screen and (max-width: 768px) {
             body { padding: 5px; }
             .toolbar, .page { width: 100%; padding: 15px; box-sizing: border-box; min-height: auto; }
@@ -128,7 +120,6 @@
             .info-section { flex-direction: column; gap: 20px; }
             .info-left, .info-right { width: 100%; }
             
-            /* 모바일 화면에서만 가로 스크롤 허용 */
             .table-responsive { overflow-x: auto; }
             .main-table { min-width: 800px; }
             
@@ -301,7 +292,6 @@
     window.lastAutoRemarks = "";
 
     function prepareAndPrint() {
-        // 인쇄 전 가장 최신 정보로 계산 및 텍스트 전환
         calcAll();
 
         const customer = document.getElementById('customerName').value || "고객사명";
@@ -357,11 +347,10 @@
             "GIER (Ransomware Service)": "Genian MDR(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "GIED (Device Control)": "Genian MDR(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud NAC V6.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
-            "Genian Cloud NAC V5.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
+            "Cloud NAC V5.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud ZTNA (PA)": "Genian Cloud ZTNA(서비스형) 제안에 대하여 아래와 같이 견적 합니다."
         };
         
-        // 직접 입력인 경우는 안내 문구를 비우거나 자유롭게 타이핑할 수 있게 빈값을 줍니다.
         if (firstRowSel.value === "direct") {
             msgDiv.innerText = "제안에 대하여 아래와 같이 견적 합니다.";
         } else {
@@ -377,7 +366,7 @@
         const rows = document.querySelectorAll('#itemTable tbody tr');
         rows.forEach(tr => {
             const prod = tr.querySelector('.product-sel').value;
-            if (!prod || prod === "direct") return; // 직접 입력은 자동 생성에서 제외
+            if (!prod || prod === "direct") return; 
             const billing = tr.querySelector('.billing-sel').value;
             const cycleStr = (billing === "1") ? "월" : "연";
 
@@ -510,7 +499,7 @@
                 { max: 9999999, prices: { "무약정": 2700, "1년약정": 2700, "2년약정": 2700, "3년약정": 2700 } }
             ]
         },
-        "Genian Cloud NAC V5.0": {
+        "Cloud NAC V5.0": {
             type: "monthly",
             tiers: [
                 { max: 100, prices: { "무약정": 16000, "1년약정": 16000, "2년약정": 16000, "3년약정": 16000 } },
@@ -611,14 +600,17 @@
         termSel.innerHTML = '<option value="">-- 계약 기간 --</option>';
 
         if (prodName === 'direct') {
-            // 직접입력 모드
+            // 직접입력 모드: 기존 select를 숨기고 그 자리에 input 표시
+            selectElem.style.display = 'none'; 
             prodCustom.style.display = 'block';
+            
             termSel.style.display = 'none';
             termCustom.style.display = 'block';
+            
             qtyInput.style.display = 'inline-block';
             
             consumerPrice.removeAttribute('readonly');
-            consumerPrice.placeholder = "직접입력";
+            consumerPrice.placeholder = "단가 직접입력";
             
             consumerPrice.value = "";
             tr.querySelector('.proposed-price').value = "";
@@ -626,14 +618,6 @@
             tr.querySelector('.row-vat').value = "";
             calcAll();
             return;
-        } else {
-            // 선택 모드 원복
-            prodCustom.style.display = 'none';
-            termSel.style.display = 'inline-block';
-            termCustom.style.display = 'none';
-            
-            consumerPrice.setAttribute('readonly', 'readonly');
-            consumerPrice.placeholder = "자동계산";
         }
 
         if(!prodName) {
@@ -672,7 +656,8 @@
         const rows = document.querySelectorAll('#itemTable tbody tr');
 
         rows.forEach(tr => {
-            const prodName = tr.querySelector('.product-sel').value;
+            const prodSel = tr.querySelector('.product-sel');
+            const prodName = prodSel.value;
             const term = tr.querySelector('.term-sel').value;
             const billingMulti = parseInt(tr.querySelector('.billing-sel').value) || 1;
             const qty = parseInt(tr.querySelector('.qty').value) || 0;
@@ -714,8 +699,6 @@
                 tr.querySelector('.row-vat').value = vat ? vat.toLocaleString() : "";
             }
 
-            // PDF 인쇄 텍스트 전환
-            const prodSel = tr.querySelector('.product-sel');
             const prodPrint = prodSel.parentElement.querySelector('.print-text');
             if (prodSel.value === 'direct') {
                 prodPrint.innerText = tr.querySelector('.product-custom').value;
