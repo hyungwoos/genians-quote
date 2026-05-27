@@ -111,23 +111,311 @@
         }
 
         @media screen and (max-width: 768px) {
-            body { padding: 5px; }
-            .toolbar, .page { width: 100%; padding: 15px; box-sizing: border-box; min-height: auto; }
+            body { 
+                padding: 0; 
+                background: #f2f4f6; 
+                color: #222; 
+            }
+
+            .toolbar { 
+                position: sticky; 
+                top: 0; 
+                z-index: 100; 
+                width: 100%; 
+                margin: 0; 
+                padding: 10px; 
+                border-radius: 0; 
+                display: flex; 
+                flex-direction: column; 
+                gap: 8px; 
+                box-shadow: 0 2px 8px rgba(0,0,0,0.12); 
+            }
+
+            .toolbar > div:first-child {
+                font-size: 13px;
+                text-align: center;
+            }
+
+            .toolbar > div:last-child {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .btn { 
+                width: 100%; 
+                padding: 12px 8px; 
+                font-size: 14px; 
+                border-radius: 8px; 
+            }
+
+            .page { 
+                width: 100%; 
+                min-height: auto; 
+                margin: 0; 
+                padding: 14px; 
+                box-sizing: border-box; 
+                box-shadow: none; 
+            }
             
-            .logo-box { position: relative; top: 0; left: 0; text-align: center; margin-bottom: 15px; }
-            .doc-title { margin-top: 0; margin-bottom: 20px; font-size: 28px; }
+            .logo-box { 
+                position: relative; 
+                top: 0; 
+                left: 0; 
+                text-align: center; 
+                margin-bottom: 12px; 
+            }
+
+            .logo-box img { 
+                height: 30px; 
+            }
+
+            .doc-title { 
+                margin-top: 0; 
+                margin-bottom: 18px; 
+                font-size: 26px; 
+                letter-spacing: 8px; 
+                text-underline-offset: 7px; 
+            }
             
-            .info-section { flex-direction: column; gap: 20px; }
-            .info-left, .info-right { width: 100%; }
+            .info-section { 
+                flex-direction: column; 
+                gap: 14px; 
+                margin-bottom: 16px; 
+            }
+
+            .info-left, .info-right { 
+                width: 100%; 
+            }
+
+            .info-left {
+                gap: 12px;
+                padding-bottom: 0;
+            }
+
+            .info-left > div {
+                display: block !important;
+            }
+
+            .info-left span {
+                display: block;
+                width: auto !important;
+                margin-bottom: 5px;
+                font-size: 12px;
+                color: #555;
+            }
+
+            #customerName {
+                font-size: 20px !important;
+                height: 44px;
+            }
+
+            .info-right table,
+            .info-right tbody,
+            .info-right tr,
+            .info-right th,
+            .info-right td {
+                display: block;
+                width: 100% !important;
+            }
+
+            .info-right table {
+                border: 1px solid #ddd;
+                border-radius: 12px;
+                overflow: hidden;
+                font-size: 12px;
+                background: #fff;
+            }
+
+            .info-right tr {
+                border-bottom: 1px solid #eee;
+            }
+
+            .info-right tr:last-child {
+                border-bottom: none;
+            }
+
+            .info-right th,
+            .info-right td {
+                border: none;
+                text-align: left;
+                padding: 8px 10px;
+            }
+
+            .info-right th {
+                background: #f7f7f7;
+                font-size: 12px;
+            }
+
+            .info-right .provider-title {
+                writing-mode: horizontal-tb;
+                text-orientation: mixed;
+                letter-spacing: 0;
+                text-align: center;
+                font-weight: 900;
+                background: var(--genians-green);
+                color: #fff;
+            }
+
+            #managerSelect {
+                width: 100% !important;
+            }
+
+            #quoteMessage {
+                font-size: 14px !important;
+                line-height: 1.4;
+                margin: 12px 0;
+            }
             
-            .table-responsive { overflow-x: auto; }
-            .main-table { min-width: 800px; }
+            .table-responsive { 
+                overflow: visible; 
+                width: 100%; 
+            }
+
+            .main-table,
+            .main-table thead,
+            .main-table tbody,
+            .main-table tr,
+            .main-table th,
+            .main-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .main-table {
+                border: none;
+                table-layout: auto;
+                font-size: 14px;
+            }
+
+            .main-table thead {
+                display: none;
+            }
+
+            .main-table tr {
+                position: relative;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 14px;
+                padding: 12px;
+                margin-bottom: 14px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            }
+
+            .main-table td {
+                height: auto;
+                min-height: auto;
+                border: none;
+                padding: 7px 0;
+                text-align: left !important;
+                vertical-align: top;
+            }
+
+            .main-table td::before {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 12px;
+                font-weight: 800;
+                color: #555;
+            }
+
+            .main-table td:nth-child(1)::before { content: "서비스"; }
+            .main-table td:nth-child(2)::before { content: "계약 기간"; }
+            .main-table td:nth-child(3)::before { content: "납부 주기"; }
+            .main-table td:nth-child(4)::before { content: "소비자 단가"; }
+            .main-table td:nth-child(5)::before { content: "수량"; }
+            .main-table td:nth-child(6)::before { content: "제안 단가"; }
+            .main-table td:nth-child(7)::before { content: "공급 제안가"; }
+            .main-table td:nth-child(8)::before { content: "세액"; }
+            .main-table td:nth-child(9)::before { content: "비고"; }
+
+            select,
+            input,
+            textarea,
+            .custom-input {
+                min-height: 42px;
+                font-size: 15px !important;
+                border: 1px solid #d8dde3 !important;
+                border-radius: 9px !important;
+                padding: 9px 10px !important;
+                background: #fff !important;
+            }
+
+            input[readonly] {
+                background: #f7f8fa !important;
+                color: #333;
+            }
+
+            .input-num,
+            .text-right {
+                text-align: right !important;
+            }
+
+            .qty {
+                width: 100% !important;
+            }
+
+            .btn-del {
+                position: static !important;
+                width: 100% !important;
+                height: 36px !important;
+                border-radius: 8px !important;
+                margin-top: 6px;
+                font-size: 13px !important;
+                background: #dc3545 !important;
+            }
+
+            .btn-del::after {
+                content: " 항목 삭제";
+            }
             
-            .amount-box { flex-direction: column; text-align: center; gap: 10px; font-size: 14px; }
+            .amount-box { 
+                position: sticky;
+                bottom: 0;
+                z-index: 80;
+                flex-direction: column; 
+                text-align: center; 
+                gap: 8px; 
+                margin: 14px -14px 0;
+                padding: 14px;
+                font-size: 15px; 
+                border-left: none;
+                border-right: none;
+                border-bottom: none;
+                border-radius: 14px 14px 0 0;
+                box-shadow: 0 -4px 14px rgba(0,0,0,0.14);
+            }
+
+            .amount-box div:last-child {
+                font-size: 17px;
+                line-height: 1.5;
+                word-break: keep-all;
+            }
             
-            .remarks-section table, .remarks-section tbody, .remarks-section tr, .remarks-section td { display: block; width: 100%; }
-            .remarks-section td { padding: 2px 0; }
-            .remarks-section input[type="text"] { margin-bottom: 5px; }
+            .remarks-section { 
+                margin-top: 18px; 
+            }
+
+            .remarks-section table, 
+            .remarks-section tbody, 
+            .remarks-section tr, 
+            .remarks-section td { 
+                display: block; 
+                width: 100%; 
+            }
+
+            .remarks-section td { 
+                padding: 3px 0; 
+            }
+
+            .remarks-section input[type="text"] { 
+                margin-bottom: 6px; 
+            }
+
+            .remarks-section textarea {
+                min-height: 150px;
+                line-height: 1.5;
+            }
         }
     </style>
 </head>
