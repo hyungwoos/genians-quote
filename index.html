@@ -417,6 +417,203 @@
                 line-height: 1.5;
             }
         }
+
+
+        /* 모바일에서 PDF 발행 시 A4 견적서 레이아웃을 강제로 복원 */
+        body.force-print-layout {
+            background: #fff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        body.force-print-layout .toolbar,
+        body.force-print-layout .btn-del,
+        body.force-print-layout .no-print {
+            display: none !important;
+        }
+        body.force-print-layout .only-print,
+        body.force-print-layout .print-text {
+            display: block !important;
+        }
+        body.force-print-layout .page {
+            width: 210mm !important;
+            min-width: 210mm !important;
+            height: 297mm !important;
+            min-height: 297mm !important;
+            margin: 0 auto !important;
+            padding: 15mm !important;
+            box-shadow: none !important;
+            position: relative !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+        }
+        body.force-print-layout .logo-box {
+            position: absolute !important;
+            top: 15mm !important;
+            left: 15mm !important;
+            text-align: left !important;
+            margin: 0 !important;
+        }
+        body.force-print-layout .logo-box img {
+            height: 35px !important;
+        }
+        body.force-print-layout .doc-title {
+            margin-top: 0 !important;
+            margin-bottom: 30px !important;
+            font-size: 36px !important;
+            letter-spacing: 15px !important;
+            text-align: center !important;
+        }
+        body.force-print-layout .info-section {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            justify-content: space-between !important;
+            gap: 0 !important;
+            margin-bottom: 20px !important;
+            font-size: 12px !important;
+        }
+        body.force-print-layout .info-left {
+            width: 45% !important;
+            flex: 0 0 45% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-end !important;
+            gap: 10px !important;
+            padding-bottom: 5px !important;
+        }
+        body.force-print-layout .info-left > div {
+            display: flex !important;
+        }
+        body.force-print-layout .info-left span {
+            display: inline-block !important;
+            width: 60px !important;
+            margin-bottom: 0 !important;
+            font-size: 12px !important;
+            color: #333 !important;
+        }
+        body.force-print-layout .info-right {
+            width: 50% !important;
+            flex: 0 0 50% !important;
+        }
+        body.force-print-layout .info-right table {
+            display: table !important;
+            width: 100% !important;
+            border-collapse: collapse !important;
+            border: 2px solid #000 !important;
+            border-radius: 0 !important;
+            overflow: visible !important;
+            table-layout: fixed !important;
+            font-size: 11px !important;
+            background: #fff !important;
+        }
+        body.force-print-layout .info-right tbody { display: table-row-group !important; }
+        body.force-print-layout .info-right tr { display: table-row !important; border-bottom: none !important; }
+        body.force-print-layout .info-right th,
+        body.force-print-layout .info-right td {
+            display: table-cell !important;
+            width: auto !important;
+            border: 1px solid #000 !important;
+            padding: 4px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-size: 11px !important;
+            height: auto !important;
+            min-height: 0 !important;
+        }
+        body.force-print-layout .info-right th {
+            background: #f0f0f0 !important;
+            font-weight: bold !important;
+        }
+        body.force-print-layout .info-right .provider-title {
+            writing-mode: vertical-rl !important;
+            text-orientation: upright !important;
+            width: 30px !important;
+            min-width: 30px !important;
+            max-width: 30px !important;
+            letter-spacing: 5px !important;
+            font-size: 13px !important;
+            white-space: nowrap !important;
+        }
+        body.force-print-layout .info-right img[alt="직인"] {
+            width: 40px !important;
+            right: -10px !important;
+        }
+        body.force-print-layout .table-responsive {
+            overflow: visible !important;
+            width: 100% !important;
+            display: block !important;
+        }
+        body.force-print-layout .main-table {
+            display: table !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+            font-size: 11px !important;
+            border: 1px solid #000 !important;
+        }
+        body.force-print-layout .main-table thead { display: table-header-group !important; }
+        body.force-print-layout .main-table tbody { display: table-row-group !important; }
+        body.force-print-layout .main-table tr {
+            display: table-row !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+        }
+        body.force-print-layout .main-table th,
+        body.force-print-layout .main-table td {
+            display: table-cell !important;
+            border: 1px solid #ccc !important;
+            height: 40px !important;
+            padding: 2px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            white-space: nowrap !important;
+            font-size: 11px !important;
+        }
+        body.force-print-layout .main-table th {
+            background: var(--genians-green) !important;
+            color: #fff !important;
+            border-color: var(--genians-green) !important;
+        }
+        body.force-print-layout .main-table td::before { content: none !important; display: none !important; }
+        body.force-print-layout select { display: none !important; }
+        body.force-print-layout input,
+        body.force-print-layout textarea {
+            border: none !important;
+            background: transparent !important;
+            border-radius: 0 !important;
+            min-height: 0 !important;
+            height: auto !important;
+            padding: 2px !important;
+            font-size: inherit !important;
+        }
+        body.force-print-layout .amount-box {
+            position: static !important;
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            text-align: left !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            margin-top: 15px !important;
+            padding: 15px !important;
+            font-size: 16px !important;
+        }
+        body.force-print-layout .remarks-section table { display: table !important; width: 100% !important; table-layout: fixed !important; }
+        body.force-print-layout .remarks-section tbody { display: table-row-group !important; }
+        body.force-print-layout .remarks-section tr { display: table-row !important; }
+        body.force-print-layout .remarks-section td { display: table-cell !important; width: auto !important; padding: 5px !important; }
+
+        @media print {
+            body.force-print-layout .page,
+            .page {
+                transform: none !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -614,10 +811,20 @@
         
         document.title = fileName; 
 
+        document.body.classList.add('force-print-layout');
+
+        const clearPrintMode = function() {
+            document.body.classList.remove('force-print-layout');
+            document.title = originalTitle;
+        };
+
+        window.onafterprint = clearPrintMode;
+
         setTimeout(function() {
             window.print();
-            document.title = originalTitle; 
-        }, 100);
+            // 일부 모바일 브라우저는 afterprint 이벤트가 늦거나 동작하지 않아 보정 처리
+            setTimeout(clearPrintMode, 1200);
+        }, 150);
     }
 
     function updateQuoteMessage() {
