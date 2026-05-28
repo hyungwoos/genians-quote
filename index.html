@@ -350,67 +350,70 @@
         }
     }
 
-    function updateRemarksText() {
-        let hasMDR = false, mdrCycle = "";
-        let hasNAC = false, nacCycle = "";
-        let hasPA = false, paCycle = "";
-        let hasDocuRay = false;
+function updateRemarksText() {
+    let hasMDR = false, mdrCycle = "";
+    let hasNAC = false, nacCycle = "";
+    let hasPA = false, paCycle = "";
+    let hasDocuRay = false;
 
-        const rows = document.querySelectorAll('#itemTable tbody tr');
-        rows.forEach(tr => {
-            const prod = tr.querySelector('.product-sel').value;
-            if (!prod || prod === "direct") return; 
-            
-            const billing = tr.querySelector('.billing-sel').value;
-            if (!billing) return; // 납부 주기가 선택되지 않으면 비고란 자동생성 보류
-
-            let cycleStr = "연";
-            if (billing === "1") cycleStr = "월";
-            else if (billing === "lump") cycleStr = "일시납";
-
-            if (prod.includes("MDR") || prod.includes("AV") || prod.includes("Ransomware") || prod.includes("Device")) {
-                hasMDR = true; mdrCycle = cycleStr;
-            } else if (prod.includes("NAC")) {
-                hasNAC = true; nacCycle = cycleStr;
-            } else if (prod.includes("ZTNA") || prod.includes("PA")) {
-                hasPA = true; paCycle = cycleStr;
-            } else if (prod.includes("DocuRay")) {
-                hasDocuRay = true;
-            }
-        });
-
-        let parts = [];
-
-        // 일시납 여부에 따른 출력 문구 함수
-        const getMethodStr = (cycle) => cycle === "일시납" ? "- 약정 일시납 조건" : `- ${cycle} 구독 서비스 방식`;
-
-        if (hasMDR) {
-            parts.push(`[Genian MDR]\n${getMethodStr(mdrCycle)}\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
-        }
+    const rows = document.querySelectorAll('#itemTable tbody tr');
+    rows.forEach(tr => {
+        const prod = tr.querySelector('.product-sel').value;
+        if (!prod || prod === "direct") return; 
         
-        if (hasNAC && hasPA) {
-            parts.push(`[Cloud ZTNA]\n${getMethodStr(nacCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- PA 라이선스는 SSL VPN 동시 접속자 기준`);
-        } else if (hasNAC) { 
-            parts.push(`[Cloud NAC]\n${getMethodStr(nacCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
-        } else if (hasPA) { 
-            parts.push(`[Cloud ZTNA (PA)]\n${getMethodStr(paCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
-        }
+        const billing = tr.querySelector('.billing-sel').value;
+        if (!billing) return;
 
-        const autoStr = parts.join('\n\n');
-        const textarea = document.querySelector('.remarks-section textarea');
+        let cycleStr = "연";
+        if (billing === "1") cycleStr = "월";
+        else if (billing === "lump") cycleStr = "일시납";
+
+        if (prod.includes("MDR") || prod.includes("AV") || prod.includes("Ransomware") || prod.includes("Device")) {
+            hasMDR = true; mdrCycle = cycleStr;
+        } else if (prod.includes("NAC")) {
+            hasNAC = true; nacCycle = cycleStr;
+        } else if (prod.includes("ZTNA") || prod.includes("PA")) {
+            hasPA = true; paCycle = cycleStr;
+        } else if (prod.includes("DocuRay")) {
+            hasDocuRay = true;
+        }
+    });
+
+    let parts = [];
+
+    const getMethodStr = (cycle) => cycle === "일시납" ? "- 약정 일시납 조건" : `- ${cycle} 구독 서비스 방식`;
+
+    if (hasMDR) {
+        parts.push(`[Genian MDR]\n${getMethodStr(mdrCycle)}\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
+    }
+    
+    if (hasNAC && hasPA) {
+        parts.push(`[Cloud ZTNA]\n${getMethodStr(nacCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- PA 라이선스는 SSL VPN 동시 접속자 기준`);
+    } else if (hasNAC) { 
+        parts.push(`[Cloud NAC]\n${getMethodStr(nacCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
+    } else if (hasPA) { 
+        parts.push(`[Cloud ZTNA (PA)]\n${getMethodStr(paCycle)}\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음`);
+    }
+
+    if (hasDocuRay) {
+        parts.push(`[DocuRay]\n- 클라우드 서비스형 월 사용 견적 기준\n- 폐쇄망 운영 고객사는 서비스 불가\n- User 추가는 10명 단위로 가능, 제안 단가는 동일하게 적용`);
+    }
+
+    const autoStr = parts.join('\n\n');
+    const textarea = document.querySelector('.remarks-section textarea');
+    
+    if (textarea.value.trim() === "" || textarea.value === window.lastAutoRemarks) {
+        textarea.value = autoStr;
+        window.lastAutoRemarks = autoStr;
         
-        if (textarea.value.trim() === "" || textarea.value === window.lastAutoRemarks) {
-            textarea.value = autoStr;
-            window.lastAutoRemarks = autoStr;
-            
-            textarea.style.height = "auto";
-            if(autoStr !== "") {
-                textarea.style.height = (textarea.scrollHeight + 5) + "px";
-            } else {
-                textarea.style.height = "120px";
-            }
+        textarea.style.height = "auto";
+        if(autoStr !== "") {
+            textarea.style.height = (textarea.scrollHeight + 5) + "px";
+        } else {
+            textarea.style.height = "120px";
         }
     }
+}
 
     function updateManagerInfo() {
         const sel = document.getElementById('managerSelect');
