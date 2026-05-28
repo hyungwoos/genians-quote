@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genians 공식 자동 견적 시스템 v2.6 PC전용</title>
+    <title>Genians 공식 자동 견적 시스템 v2.7 PC전용</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
@@ -141,7 +141,7 @@
     }
 </script>
 <div class="toolbar">
-    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v2.6</div>
+    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v2.7</div>
     <div>
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
         <button class="btn btn-print" onclick="prepareAndPrint()">견적서 발행 (PDF)</button>
@@ -301,6 +301,9 @@
             } else if (prodValue.includes("NAC") || prodValue.includes("ZTNA")) {
                 prodLabel = prodValue.includes("NAC") ? "Genian Cloud NAC(서비스형)" : "Genian Cloud ZTNA(서비스형)";
                 unit = "Node";
+            } else if (prodValue.includes("DocuRay")) {
+                prodLabel = prodValue + "(서비스형)";
+                unit = "User";
             } else {
                 prodLabel = prodValue || "견적서비스";
             }
@@ -335,7 +338,9 @@
             "GIED (Device Control)": "Genian MDR(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud NAC V6.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud NAC V5.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
-            "Cloud ZTNA (PA)": "Genian Cloud ZTNA(서비스형) 제안에 대하여 아래와 같이 견적 합니다."
+            "Cloud ZTNA (PA)": "Genian Cloud ZTNA(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
+            "DocuRay DRM": "DocuRay DRM 클라우드 서비스형 제안에 대하여 아래와 같이 견적 합니다.",
+            "DocuRay DLP": "DocuRay DLP 클라우드 서비스형 제안에 대하여 아래와 같이 견적 합니다."
         };
         
         if (firstRowSel.value === "direct") {
@@ -349,6 +354,7 @@
         let hasMDR = false, mdrCycle = "";
         let hasNAC = false, nacCycle = "";
         let hasPA = false, paCycle = "";
+        let hasDocuRay = false;
 
         const rows = document.querySelectorAll('#itemTable tbody tr');
         rows.forEach(tr => {
@@ -368,6 +374,8 @@
                 hasNAC = true; nacCycle = cycleStr;
             } else if (prod.includes("ZTNA") || prod.includes("PA")) {
                 hasPA = true; paCycle = cycleStr;
+            } else if (prod.includes("DocuRay")) {
+                hasDocuRay = true;
             }
         });
 
@@ -530,6 +538,18 @@
                 { max: 2000, prices: { "무약정": 5400, "1년약정": 5400, "2년약정": 5400, "3년약정": 5400 } },
                 { max: 2500, prices: { "무약정": 4800, "1년약정": 4800, "2년약정": 4800, "3년약정": 4800 } },
                 { max: 9999999, prices: { "무약정": 4400, "1년약정": 4400, "2년약정": 4400, "3년약정": 4400 } }
+            ]
+        },
+        "DocuRay DRM": {
+            type: "monthly",
+            tiers: [
+                { max: 9999999, prices: { "무약정": 20000, "1년약정": 20000, "2년약정": 20000, "3년약정": 20000 } }
+            ]
+        },
+        "DocuRay DLP": {
+            type: "monthly",
+            tiers: [
+                { max: 9999999, prices: { "무약정": 20000, "1년약정": 20000, "2년약정": 20000, "3년약정": 20000 } }
             ]
         }
     };
