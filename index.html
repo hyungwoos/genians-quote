@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genians 공식 자동 견적 시스템 v4.1 PC전용</title>
+    <title>Genians 공식 자동 견적 시스템 v4.3 PC전용</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
@@ -84,6 +84,25 @@
         .modal-box label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; margin-top: 10px; }
         .modal-box input[type="text"], .modal-box input[type="password"] { border: 1px solid #ccc; border-radius: 4px; padding: 8px; font-size: 13px; }
 
+        /* PDF 캡처 모드: GitHub에 실제 PDF를 저장하기 위해 화면을 인쇄 화면처럼 잠깐 바꿉니다 */
+        body.pdf-capturing .toolbar,
+        body.pdf-capturing .btn-del,
+        body.pdf-capturing .btn-dup,
+        body.pdf-capturing .no-print,
+        body.pdf-capturing .modal-overlay { display: none !important; }
+        body.pdf-capturing .only-print { display: block !important; }
+        body.pdf-capturing .print-text { display: block !important; }
+        body.pdf-capturing tr.row-incomplete td { background: transparent !important; }
+        body.pdf-capturing #incompleteWarning { display: none !important; }
+        body.pdf-capturing .info-left .input-line,
+        body.pdf-capturing input,
+        body.pdf-capturing textarea { border: none !important; background: transparent !important; }
+        body.pdf-capturing .remarks-section textarea { border: none !important; }
+        body.pdf-capturing .main-table td:first-child .print-text {
+            display: block !important; white-space: normal !important; word-break: keep-all !important;
+            overflow-wrap: anywhere !important; font-size: 9.5px !important; line-height: 1.2 !important; max-width: 100% !important;
+        }
+
         @media print {
             @page { size: A4 portrait; margin: 0; }
             html, body {
@@ -134,6 +153,9 @@
         }
     </style>
 </head>
+<!-- PDF 캡처/생성 라이브러리 (GitHub 저장용 실제 PDF 파일 생성에 사용) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <body>
 
 <!--
@@ -214,7 +236,7 @@
 </div>
 
 <div class="toolbar">
-    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v4.1</div>
+    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v4.3</div>
     <div class="toolbar-actions">
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
 
@@ -1184,19 +1206,60 @@
         return btoa(unescape(encodeURIComponent(str)));
     }
 
-    // 실제 저장 로직 (Worker에 저장). 버튼 클릭과 PDF 발행 시 자동 저장에서 공용으로 사용.
+    // ─────────────────────────────────────────────
+    // PDF 생성 (GitHub 저장용): 화면을 인쇄 모습으로 잠깐 바꾼 뒤 캡처합니다.
+    // ─────────────────────────────────────────────
+    function togglePdfCaptureView(enable) {
+        document.body.classList.toggle('pdf-capturing', enable);
+    }
+
+    function blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    async function generateQuotePdfBase64() {
+        togglePdfCaptureView(true);
+        try {
+            await new Promise(r => setTimeout(r, 80)); // 스타일 반영 대기
+
+            const pageEl = document.querySelector('.page');
+            const canvas = await html2canvas(pageEl, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+            pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+
+            const pdfBlob = pdf.output('blob');
+            return await blobToBase64(pdfBlob);
+        } finally {
+            togglePdfCaptureView(false);
+        }
+    }
+
+    // 실제 저장 로직 (Worker에 PDF 저장). 버튼 클릭과 PDF 발행 시 자동 저장에서 공용으로 사용.
     async function silentSaveToGithub() {
         if (!workerConfig.baseUrl || !workerConfig.accessPassword) {
             return { attempted: false };
         }
 
-        const data = collectQuoteData();
-        const customer = sanitizeFileName(data.customerName || '고객사미입력');
-        const dateStr = (data.quoteDate || new Date().toISOString().slice(0, 10)).replace(/-/g, '');
+        const customer = sanitizeFileName(document.getElementById('customerName').value || '고객사미입력');
+        const qDate = sanitizeFileName(document.getElementById('quoteDate').value || new Date().toISOString().slice(0, 10)).replace(/-/g, '');
         const timeStamp = Date.now();
-        const fileName = `${dateStr}_${customer}_${timeStamp}.json`;
+        const fileName = `${qDate}_${customer}_${timeStamp}.pdf`;
 
         try {
+            const base64Pdf = await generateQuotePdfBase64();
+
             const res = await fetch(`${workerConfig.baseUrl}/save`, {
                 method: 'POST',
                 headers: {
@@ -1205,8 +1268,8 @@
                 },
                 body: JSON.stringify({
                     fileName: fileName,
-                    message: `견적 저장: ${data.customerName || '고객사미입력'} (${data.quoteDate || ''})`,
-                    content: utf8ToBase64(JSON.stringify(data, null, 2))
+                    message: `견적 PDF 저장: ${customer} (${qDate})`,
+                    content: base64Pdf
                 })
             });
 
@@ -1267,6 +1330,7 @@
 
             listDiv.innerHTML = '';
             jsonFiles.forEach(f => {
+                const isPdf = f.name.endsWith('.pdf');
                 const row = document.createElement('div');
                 row.style.display = 'flex';
                 row.style.justifyContent = 'space-between';
@@ -1274,10 +1338,14 @@
                 row.style.padding = '10px 12px';
                 row.style.borderBottom = '1px solid #eee';
                 row.innerHTML = `
-                    <span style="font-size:13px; word-break:break-all;">${f.name}</span>
-                    <button style="flex-shrink:0; margin-left:10px; padding:6px 12px; background:var(--genians-green); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">불러오기</button>
+                    <span style="font-size:13px; word-break:break-all;">${isPdf ? '📄 ' : '📝 '}${f.name}</span>
+                    <span style="flex-shrink:0; display:flex; gap:6px; margin-left:10px;">
+                        <button class="btn-load" style="padding:6px 12px; background:var(--genians-green); color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">${isPdf ? '열기' : '불러오기'}</button>
+                        <button class="btn-remove" style="padding:6px 10px; background:#e74c3c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;" title="삭제">🗑</button>
+                    </span>
                 `;
-                row.querySelector('button').onclick = () => loadGithubFile(f.path, f.name);
+                row.querySelector('.btn-load').onclick = () => loadGithubFile(f.path, f.name);
+                row.querySelector('.btn-remove').onclick = () => deleteGithubFile(f.path, f.name);
                 listDiv.appendChild(row);
             });
         } catch (err) {
@@ -1296,6 +1364,14 @@
                 throw new Error(errResult.error || `HTTP ${res.status}`);
             }
 
+            if (fileName.endsWith('.pdf')) {
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                closeGithubListModal();
+                return;
+            }
+
             const text = await res.text();
             const data = JSON.parse(text);
 
@@ -1304,6 +1380,31 @@
             alert(`"${fileName}" 견적을 불러왔습니다.`);
         } catch (err) {
             alert(`불러오기 중 오류가 발생했습니다.\n${err.message}`);
+        }
+    }
+
+    async function deleteGithubFile(filePath, fileName) {
+        if (!confirm(`"${fileName}" 을(를) 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) return;
+
+        try {
+            const res = await fetch(`${workerConfig.baseUrl}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Access-Password': workerConfig.accessPassword
+                },
+                body: JSON.stringify({
+                    path: filePath,
+                    message: `견적 삭제: ${fileName}`
+                })
+            });
+
+            const result = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
+
+            listGithubQuotes(); // 목록 새로고침
+        } catch (err) {
+            alert(`삭제 중 오류가 발생했습니다.\n${err.message}`);
         }
     }
 </script>
