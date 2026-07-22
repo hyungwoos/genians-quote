@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genians 공식 자동 견적 시스템 v5.3 PC전용</title>
+    <title>Genians 공식 자동 견적 시스템 v5.4 PC전용</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
@@ -282,7 +282,7 @@
 </div>
 
 <div class="toolbar">
-    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.3 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
+    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.4 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
     <div class="toolbar-actions">
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
 
@@ -835,6 +835,12 @@
                 { max: 2000, prices: { "무약정": 3300, "1년약정": 3300, "2년약정": 3300, "3년약정": 3300 } },
                 { max: 2500, prices: { "무약정": 2900, "1년약정": 2900, "2년약정": 2900, "3년약정": 2900 } },
                 { max: 9999999, prices: { "무약정": 2700, "1년약정": 2700, "2년약정": 2700, "3년약정": 2700 } }
+            ]
+        },
+        "Cloud Sensor": {
+            type: "monthly", // Cloud NAC와 동일한 계약기간 체계(무약정/1년/2년/3년약정)를 따릅니다.
+            tiers: [
+                { max: 9999999, prices: { "무약정": 150000, "1년약정": 150000, "2년약정": 150000, "3년약정": 150000 } }
             ]
         },
         "Cloud ZTNA (PA)": {
