@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genians 공식 자동 견적 시스템 v5.0 PC전용</title>
+    <title>Genians 공식 자동 견적 시스템 v5.2 PC전용</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
@@ -282,7 +282,7 @@
 </div>
 
 <div class="toolbar">
-    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.0 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
+    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.2 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
     <div class="toolbar-actions">
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
 
@@ -638,6 +638,7 @@
         let hasDocuRay = false;
         let hasPublicZTNA = false, publicZtnaCycle = "";
         let hasPublicGPI = false, publicGpiCycle = "";
+        let hasBlockModule = false, hasGatewayModule = false;
 
         const rows = document.querySelectorAll('#itemTable tbody tr');
         rows.forEach(tr => {
@@ -660,6 +661,14 @@
                 hasPublicGPI = true; publicGpiCycle = cycleStr;
                 return;
             }
+            if (prod === "차단서버모듈") {
+                hasBlockModule = true;
+                return;
+            }
+            if (prod === "게이트웨이모듈 (ZTNA 전용)") {
+                hasGatewayModule = true;
+                return;
+            }
 
             if (prod.includes("MDR") || prod.includes("AV") || prod.includes("Ransomware") || prod.includes("Device")) {
                 hasMDR = true; mdrCycle = cycleStr;
@@ -676,10 +685,17 @@
         const getMethodStr = (cycle) => cycle === "일시납" ? "- 약정 일시납 조건" : `- ${cycle} 구독 서비스 방식`;
 
         if (hasPublicZTNA) {
-            parts.push(`[Genian Cloud ZTNA (공공)]\n${getMethodStr(publicZtnaCycle)}\n- Node 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 참고: 초기 구축비용 별도 4,000,000원(차단서버모듈+게이트웨이모듈 포함), 정확한 금액은 별도 협의`);
+            parts.push(`[Genian Cloud ZTNA (공공)]\n${getMethodStr(publicZtnaCycle)}\n- Node 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 정식 명칭은 'Genian Cloud ZTNA'이며 NAC(차단서버모듈)/ZTNA(게이트웨이모듈) 기능을 선택적으로 사용 가능합니다.\n- 사용할 기능에 맞는 모듈을 서비스 항목에 함께 추가해주세요.`);
         }
         if (hasPublicGPI) {
             parts.push(`[Genian Cloud GPI (공공)]\n${getMethodStr(publicGpiCycle)}\n- Agent 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 별도 초기 구축비용 없음`);
+        }
+        if (hasBlockModule || hasGatewayModule) {
+            const setupTotal = (hasBlockModule ? 1000000 : 0) + (hasGatewayModule ? 3000000 : 0);
+            let moduleDesc = [];
+            if (hasBlockModule) moduleDesc.push('차단서버모듈(NAC 기능, 100만원)');
+            if (hasGatewayModule) moduleDesc.push('게이트웨이모듈(ZTNA 기능, 300만원)');
+            parts.push(`[초기 구축비용]\n- 포함 모듈: ${moduleDesc.join(' + ')}\n- 총 초기 구축비용(1회성, 월 이용료 별도): ${setupTotal.toLocaleString()}원`);
         }
         if (hasMDR) {
             parts.push(`[Genian MDR]\n${getMethodStr(mdrCycle)}\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
@@ -923,6 +939,28 @@
                 { max: 3000, prices: { "무약정": 1437000, "1년약정": 1437000, "2년약정": 1437000, "3년약정": 1437000 } },
                 { max: 9999999, prices: { "무약정": 1437000, "1년약정": 1437000, "2년약정": 1437000, "3년약정": 1437000 } }
             ]
+        },
+        "차단서버모듈": {
+            type: "monthly",
+            setupCost: 1000000, // NAC 기능(차단서버모듈) 사용 시 초기 구축비용
+            tiers: [
+                { max: 250, prices: { "무약정": 20000, "1년약정": 20000, "2년약정": 20000, "3년약정": 20000 } },
+                { max: 500, prices: { "무약정": 30000, "1년약정": 30000, "2년약정": 30000, "3년약정": 30000 } },
+                { max: 1500, prices: { "무약정": 70000, "1년약정": 70000, "2년약정": 70000, "3년약정": 70000 } },
+                { max: 2500, prices: { "무약정": 100000, "1년약정": 100000, "2년약정": 100000, "3년약정": 100000 } },
+                { max: 9999999, prices: { "무약정": 100000, "1년약정": 100000, "2년약정": 100000, "3년약정": 100000 } }
+            ]
+        },
+        "게이트웨이모듈 (ZTNA 전용)": {
+            type: "monthly",
+            setupCost: 3000000, // ZTNA 기능(게이트웨이모듈) 사용 시 초기 구축비용
+            tiers: [
+                { max: 250, prices: { "무약정": 60000, "1년약정": 60000, "2년약정": 60000, "3년약정": 60000 } },
+                { max: 500, prices: { "무약정": 90000, "1년약정": 90000, "2년약정": 90000, "3년약정": 90000 } },
+                { max: 1500, prices: { "무약정": 280000, "1년약정": 280000, "2년약정": 280000, "3년약정": 280000 } },
+                { max: 2500, prices: { "무약정": 500000, "1년약정": 500000, "2년약정": 500000, "3년약정": 500000 } },
+                { max: 9999999, prices: { "무약정": 500000, "1년약정": 500000, "2년약정": 500000, "3년약정": 500000 } }
+            ]
         }
     };
 
@@ -962,6 +1000,14 @@
                 }
                 const text = await res.text();
                 const data = JSON.parse(text);
+
+                // 불러온 견적에 공공용 서비스가 포함되어 있으면, 서비스 선택 목록도 공공용 기준으로 전환합니다.
+                const isPublicQuote = (data.rows || []).some(r => publicPricingDB[r.prod]);
+                if (isPublicQuote) {
+                    activePricingDB = publicPricingDB;
+                    document.getElementById('quoteTypeBadge').innerText = '[공공용]';
+                }
+
                 applyQuoteData(data);
                 enterDocViewMode();
             } catch (err) {
@@ -1084,6 +1130,26 @@
         addRow(data);
     }
 
+    // 공공용 서비스는 무조건 연간 계약이므로, 해당 행의 납부주기 선택을 "연납(1년)"만 남기고 잠급니다.
+    function applyBillingRestriction(tr, prodName) {
+        const billingSel = tr.querySelector('.billing-sel');
+        const isPublicProduct = !!publicPricingDB[prodName];
+
+        if (isPublicProduct) {
+            billingSel.innerHTML = '<option value="12">연납(1년)</option>';
+            billingSel.value = '12';
+            billingSel.disabled = true;
+        } else {
+            billingSel.disabled = false;
+            billingSel.innerHTML = `
+                <option value="">-- 납부 주기 --</option>
+                <option value="lump">일시납</option>
+                <option value="12">연납(1년)</option>
+                <option value="1">월납</option>
+            `;
+        }
+    }
+
     function updateOptions(selectElem) {
         const tr = selectElem.closest('tr');
         const termSel = tr.querySelector('.term-sel');
@@ -1095,6 +1161,7 @@
         const consumerPrice = tr.querySelector('.consumer-price');
 
         termSel.innerHTML = '<option value="">-- 계약 기간 --</option>';
+        applyBillingRestriction(tr, prodName);
 
         if (prodName === 'direct') {
             selectElem.style.display = 'none';
@@ -1124,7 +1191,12 @@
             qtyInput.style.display = 'inline-block';
         }
 
-        const conditions = Object.keys(allPricingDB[prodName].tiers[0].prices);
+        const isPublicProduct = !!publicPricingDB[prodName];
+        let conditions = Object.keys(allPricingDB[prodName].tiers[0].prices);
+        if (isPublicProduct) {
+            conditions = conditions.filter(c => c === '1년약정'); // 공공은 연간 계약만 허용
+        }
+
         conditions.forEach(cond => {
             termSel.innerHTML += `<option value="${cond}">${cond}</option>`;
         });
