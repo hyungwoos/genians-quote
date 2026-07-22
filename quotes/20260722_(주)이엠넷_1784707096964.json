@@ -1,0 +1,35 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-22T07:58:16.963Z",
+  "customerName": "(주)이엠넷",
+  "contactPerson": "이홍재 팀장님",
+  "quoteDate": "2026-07-22",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Cloud ZTNA (PA)]\n- 연 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "48,114,000",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "Genian Cloud ZTNA Policy Server ",
+      "term": "",
+      "termCustom": "1년 약정",
+      "billing": "12",
+      "qty": "1",
+      "proposed": "14040000",
+      "consumerPrice": "31320000",
+      "note": ""
+    },
+    {
+      "prod": "Cloud ZTNA (PA)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "300",
+      "proposed": "99000",
+      "consumerPrice": "172800",
+      "note": ""
+    }
+  ]
+}
