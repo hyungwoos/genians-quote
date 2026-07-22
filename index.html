@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genians 공식 자동 견적 시스템 v5.2 PC전용</title>
+    <title>Genians 공식 자동 견적 시스템 v5.3 PC전용</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
@@ -282,7 +282,7 @@
 </div>
 
 <div class="toolbar">
-    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.2 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
+    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.3 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
     <div class="toolbar-actions">
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
 
@@ -370,6 +370,7 @@
 
     <div id="quoteMessage" style="text-align: left; font-size: 15px; font-weight: bold; margin-bottom: 5px; min-height: 22px;"></div>
     <div id="incompleteWarning" class="no-print"></div>
+    <div id="internalHint" class="no-print" style="display:none; background:#fff8e1; border:1px solid #ffd54f; border-radius:5px; padding:8px 12px; font-size:11px; color:#7a5c00; margin-bottom:8px;"></div>
 
     <div class="table-responsive">
         <table class="main-table" id="itemTable">
@@ -685,7 +686,7 @@
         const getMethodStr = (cycle) => cycle === "일시납" ? "- 약정 일시납 조건" : `- ${cycle} 구독 서비스 방식`;
 
         if (hasPublicZTNA) {
-            parts.push(`[Genian Cloud ZTNA (공공)]\n${getMethodStr(publicZtnaCycle)}\n- Node 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 정식 명칭은 'Genian Cloud ZTNA'이며 NAC(차단서버모듈)/ZTNA(게이트웨이모듈) 기능을 선택적으로 사용 가능합니다.\n- 사용할 기능에 맞는 모듈을 서비스 항목에 함께 추가해주세요.`);
+            parts.push(`[Genian Cloud ZTNA (공공)]\n${getMethodStr(publicZtnaCycle)}\n- Node 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.`);
         }
         if (hasPublicGPI) {
             parts.push(`[Genian Cloud GPI (공공)]\n${getMethodStr(publicGpiCycle)}\n- Agent 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 별도 초기 구축비용 없음`);
@@ -1325,6 +1326,17 @@
         warnDiv.innerText = incompleteCount > 0
             ? `⚠ ${incompleteCount}개 항목의 계약기간/납부주기 선택이 누락되어 금액이 계산되지 않았습니다.`
             : "";
+
+        // 견적 작성자에게만 보이는 안내 (인쇄/저장/고객용 화면에는 절대 나오지 않음)
+        const hasPublicZTNARow = Array.from(rows).some(tr => tr.querySelector('.product-sel').value === 'Genian Cloud ZTNA (공공)');
+        const hintDiv = document.getElementById('internalHint');
+        if (hasPublicZTNARow) {
+            hintDiv.style.display = 'block';
+            hintDiv.innerHTML = "📌 <b>작성 참고 (고객에게는 표시되지 않음)</b>: 'Genian Cloud ZTNA'는 NAC(차단서버모듈)/ZTNA(게이트웨이모듈) 기능을 선택적으로 제공합니다. 사용할 기능에 맞는 모듈을 서비스 항목에 함께 추가해주세요.";
+        } else {
+            hintDiv.style.display = 'none';
+            hintDiv.innerHTML = '';
+        }
 
         updateQuoteMessage();
         updateRemarksText();
