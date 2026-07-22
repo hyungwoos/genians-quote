@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genians 공식 자동 견적 시스템 v4.8 PC전용</title>
+    <title>Genians 공식 자동 견적 시스템 v5.0 PC전용</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
@@ -194,12 +194,33 @@
         <div style="margin-top: 10px; font-size: 10px; color: #999;">※ 사내 참고용 화면으로, 강력한 접근 제어를 대체하지 않습니다.</div>
     </div>
 </div>
+
+<!-- 견적서 종류 선택 화면 -->
+<div id="quoteTypeOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #525659; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; width: 340px;">
+        <img src="Logo.jpg" alt="Genians" style="height: 40px; margin-bottom: 20px;">
+        <h3 style="margin: 0 0 20px 0; color: #333;">견적서 종류 선택</h3>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <button onclick="selectQuoteType('enterprise')" style="padding: 14px; background: var(--genians-green); color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 15px; cursor: pointer;">기업용 견적</button>
+            <button onclick="selectQuoteType('public')" style="padding: 14px; background: #24292e; color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 15px; cursor: pointer;">공공용 견적</button>
+        </div>
+    </div>
+</div>
+
 <script>
     function checkPassword() {
         const secureKey = "MUdlbmlka3Mh";
         const input = document.getElementById('pwInput').value;
         if (btoa(input) === secureKey) {
             document.getElementById('loginOverlay').style.display = 'none';
+
+            // 견적 데이터를 조회용으로 여는 경우(?view=)엔 종류 선택 없이 바로 진행
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('view')) {
+                selectQuoteType('enterprise');
+            } else {
+                document.getElementById('quoteTypeOverlay').style.display = 'flex';
+            }
         } else {
             alert('비밀번호가 일치하지 않습니다.');
             document.getElementById('pwInput').value = '';
@@ -261,7 +282,7 @@
 </div>
 
 <div class="toolbar">
-    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v4.8</div>
+    <div style="font-weight: bold; color: var(--genians-green);">Genians Pricing System v5.0 <span id="quoteTypeBadge" style="color:#888; font-weight:normal; font-size:12px;"></span></div>
     <div class="toolbar-actions">
         <button class="btn btn-add" onclick="addRow()">+ 항목 추가</button>
 
@@ -598,7 +619,9 @@
             "Cloud NAC V5.0": "Genian Cloud NAC(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "Cloud ZTNA (PA)": "Genian Cloud ZTNA(서비스형) 제안에 대하여 아래와 같이 견적 합니다.",
             "DocuRay DRM": "DocuRay DRM 클라우드 서비스형 제안에 대하여 아래와 같이 견적 합니다.",
-            "DocuRay DLP": "DocuRay DLP 클라우드 서비스형 제안에 대하여 아래와 같이 견적 합니다."
+            "DocuRay DLP": "DocuRay DLP 클라우드 서비스형 제안에 대하여 아래와 같이 견적 합니다.",
+            "Genian Cloud ZTNA (공공)": "Genian Cloud ZTNA(공공) 제안에 대하여 아래와 같이 견적 합니다.",
+            "Genian Cloud GPI (공공)": "Genian Cloud GPI(공공) 제안에 대하여 아래와 같이 견적 합니다."
         };
 
         if (firstRowSel.value === "direct") {
@@ -613,6 +636,8 @@
         let hasNAC = false, nacCycle = "";
         let hasPA = false, paCycle = "";
         let hasDocuRay = false;
+        let hasPublicZTNA = false, publicZtnaCycle = "";
+        let hasPublicGPI = false, publicGpiCycle = "";
 
         const rows = document.querySelectorAll('#itemTable tbody tr');
         rows.forEach(tr => {
@@ -625,6 +650,16 @@
             let cycleStr = "연";
             if (billing === "1") cycleStr = "월";
             else if (billing === "lump") cycleStr = "일시납";
+
+            // 공공용 서비스는 기업용과 문구가 다르므로 먼저 별도로 처리하고 넘어갑니다.
+            if (prod === "Genian Cloud ZTNA (공공)") {
+                hasPublicZTNA = true; publicZtnaCycle = cycleStr;
+                return;
+            }
+            if (prod === "Genian Cloud GPI (공공)") {
+                hasPublicGPI = true; publicGpiCycle = cycleStr;
+                return;
+            }
 
             if (prod.includes("MDR") || prod.includes("AV") || prod.includes("Ransomware") || prod.includes("Device")) {
                 hasMDR = true; mdrCycle = cycleStr;
@@ -640,6 +675,12 @@
         let parts = [];
         const getMethodStr = (cycle) => cycle === "일시납" ? "- 약정 일시납 조건" : `- ${cycle} 구독 서비스 방식`;
 
+        if (hasPublicZTNA) {
+            parts.push(`[Genian Cloud ZTNA (공공)]\n${getMethodStr(publicZtnaCycle)}\n- Node 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 참고: 초기 구축비용 별도 4,000,000원(차단서버모듈+게이트웨이모듈 포함), 정확한 금액은 별도 협의`);
+        }
+        if (hasPublicGPI) {
+            parts.push(`[Genian Cloud GPI (공공)]\n${getMethodStr(publicGpiCycle)}\n- Agent 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n- 별도 초기 구축비용 없음`);
+        }
         if (hasMDR) {
             parts.push(`[Genian MDR]\n${getMethodStr(mdrCycle)}\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음`);
         }
@@ -812,10 +853,95 @@
         }
     };
 
-    window.onload = async function() {
-        document.getElementById('quoteDate').valueAsDate = new Date();
+    // ─────────────────────────────────────────────
+    // 공공용 가격 DB (Genian Cloud ZTNA / GPI, Node·Agent 수량 기준 월 이용료)
+    // setupCost: 참고용 1회성 초기 구축비용 (계산에는 자동 반영되지 않고 비고란 안내문에만 사용됩니다)
+    // ─────────────────────────────────────────────
+    const publicPricingDB = {
+        "Genian Cloud ZTNA (공공)": {
+            type: "monthly",
+            setupCost: 4000000, // 차단서버모듈 100만 + 게이트웨이모듈 300만
+            tiers: [
+                { max: 50, prices: { "무약정": 324000, "1년약정": 324000, "2년약정": 324000, "3년약정": 324000 } },
+                { max: 100, prices: { "무약정": 494000, "1년약정": 494000, "2년약정": 494000, "3년약정": 494000 } },
+                { max: 200, prices: { "무약정": 663000, "1년약정": 663000, "2년약정": 663000, "3년약정": 663000 } },
+                { max: 300, prices: { "무약정": 832000, "1년약정": 832000, "2년약정": 832000, "3년약정": 832000 } },
+                { max: 400, prices: { "무약정": 1001000, "1년약정": 1001000, "2년약정": 1001000, "3년약정": 1001000 } },
+                { max: 500, prices: { "무약정": 1170000, "1년약정": 1170000, "2년약정": 1170000, "3년약정": 1170000 } },
+                { max: 600, prices: { "무약정": 1281000, "1년약정": 1281000, "2년약정": 1281000, "3년약정": 1281000 } },
+                { max: 700, prices: { "무약정": 1395000, "1년약정": 1395000, "2년약정": 1395000, "3년약정": 1395000 } },
+                { max: 800, prices: { "무약정": 1508000, "1년약정": 1508000, "2년약정": 1508000, "3년약정": 1508000 } },
+                { max: 900, prices: { "무약정": 1606000, "1년약정": 1606000, "2년약정": 1606000, "3년약정": 1606000 } },
+                { max: 1000, prices: { "무약정": 1703000, "1년약정": 1703000, "2년약정": 1703000, "3년약정": 1703000 } },
+                { max: 1100, prices: { "무약정": 1775000, "1년약정": 1775000, "2년약정": 1775000, "3년약정": 1775000 } },
+                { max: 1200, prices: { "무약정": 1846000, "1년약정": 1846000, "2년약정": 1846000, "3년약정": 1846000 } },
+                { max: 1300, prices: { "무약정": 1915000, "1년약정": 1915000, "2년약정": 1915000, "3년약정": 1915000 } },
+                { max: 1400, prices: { "무약정": 1986000, "1년약정": 1986000, "2년약정": 1986000, "3년약정": 1986000 } },
+                { max: 1500, prices: { "무약정": 2057000, "1년약정": 2057000, "2년약정": 2057000, "3년약정": 2057000 } },
+                { max: 1600, prices: { "무약정": 2126000, "1년약정": 2126000, "2년약정": 2126000, "3년약정": 2126000 } },
+                { max: 1700, prices: { "무약정": 2197000, "1년약정": 2197000, "2년약정": 2197000, "3년약정": 2197000 } },
+                { max: 1800, prices: { "무약정": 2269000, "1년약정": 2269000, "2년약정": 2269000, "3년약정": 2269000 } },
+                { max: 1900, prices: { "무약정": 2337000, "1년약정": 2337000, "2년약정": 2337000, "3년약정": 2337000 } },
+                { max: 2000, prices: { "무약정": 2409000, "1년약정": 2409000, "2년약정": 2409000, "3년약정": 2409000 } },
+                { max: 2200, prices: { "무약정": 2548000, "1년약정": 2548000, "2년약정": 2548000, "3년약정": 2548000 } },
+                { max: 2400, prices: { "무약정": 2691000, "1년약정": 2691000, "2년약정": 2691000, "3년약정": 2691000 } },
+                { max: 2600, prices: { "무약정": 2831000, "1년약정": 2831000, "2년약정": 2831000, "3년약정": 2831000 } },
+                { max: 2800, prices: { "무약정": 2971000, "1년약정": 2971000, "2년약정": 2971000, "3년약정": 2971000 } },
+                { max: 3000, prices: { "무약정": 3114000, "1년약정": 3114000, "2년약정": 3114000, "3년약정": 3114000 } },
+                { max: 9999999, prices: { "무약정": 3114000, "1년약정": 3114000, "2년약정": 3114000, "3년약정": 3114000 } }
+            ]
+        },
+        "Genian Cloud GPI (공공)": {
+            type: "monthly",
+            setupCost: 0,
+            tiers: [
+                { max: 50, prices: { "무약정": 162000, "1년약정": 162000, "2년약정": 162000, "3년약정": 162000 } },
+                { max: 100, prices: { "무약정": 228000, "1년약정": 228000, "2년약정": 228000, "3년약정": 228000 } },
+                { max: 200, prices: { "무약정": 306000, "1년약정": 306000, "2년약정": 306000, "3년약정": 306000 } },
+                { max: 300, prices: { "무약정": 384000, "1년약정": 384000, "2년약정": 384000, "3년약정": 384000 } },
+                { max: 400, prices: { "무약정": 462000, "1년약정": 462000, "2년약정": 462000, "3년약정": 462000 } },
+                { max: 500, prices: { "무약정": 540000, "1년약정": 540000, "2년약정": 540000, "3년약정": 540000 } },
+                { max: 600, prices: { "무약정": 591000, "1년약정": 591000, "2년약정": 591000, "3년약정": 591000 } },
+                { max: 700, prices: { "무약정": 644000, "1년약정": 644000, "2년약정": 644000, "3년약정": 644000 } },
+                { max: 800, prices: { "무약정": 696000, "1년약정": 696000, "2년약정": 696000, "3년약정": 696000 } },
+                { max: 900, prices: { "무약정": 741000, "1년약정": 741000, "2년약정": 741000, "3년약정": 741000 } },
+                { max: 1000, prices: { "무약정": 786000, "1년약정": 786000, "2년약정": 786000, "3년약정": 786000 } },
+                { max: 1100, prices: { "무약정": 819000, "1년약정": 819000, "2년약정": 819000, "3년약정": 819000 } },
+                { max: 1200, prices: { "무약정": 852000, "1년약정": 852000, "2년약정": 852000, "3년약정": 852000 } },
+                { max: 1300, prices: { "무약정": 884000, "1년약정": 884000, "2년약정": 884000, "3년약정": 884000 } },
+                { max: 1400, prices: { "무약정": 917000, "1년약정": 917000, "2년약정": 917000, "3년약정": 917000 } },
+                { max: 1500, prices: { "무약정": 949000, "1년약정": 949000, "2년약정": 949000, "3년약정": 949000 } },
+                { max: 1600, prices: { "무약정": 981000, "1년약정": 981000, "2년약정": 981000, "3년약정": 981000 } },
+                { max: 1700, prices: { "무약정": 1014000, "1년약정": 1014000, "2년약정": 1014000, "3년약정": 1014000 } },
+                { max: 1800, prices: { "무약정": 1047000, "1년약정": 1047000, "2년약정": 1047000, "3년약정": 1047000 } },
+                { max: 1900, prices: { "무약정": 1079000, "1년약정": 1079000, "2년약정": 1079000, "3년약정": 1079000 } },
+                { max: 2000, prices: { "무약정": 1112000, "1년약정": 1112000, "2년약정": 1112000, "3년약정": 1112000 } },
+                { max: 2200, prices: { "무약정": 1176000, "1년약정": 1176000, "2년약정": 1176000, "3년약정": 1176000 } },
+                { max: 2400, prices: { "무약정": 1242000, "1년약정": 1242000, "2년약정": 1242000, "3년약정": 1242000 } },
+                { max: 2600, prices: { "무약정": 1307000, "1년약정": 1307000, "2년약정": 1307000, "3년약정": 1307000 } },
+                { max: 2800, prices: { "무약정": 1371000, "1년약정": 1371000, "2년약정": 1371000, "3년약정": 1371000 } },
+                { max: 3000, prices: { "무약정": 1437000, "1년약정": 1437000, "2년약정": 1437000, "3년약정": 1437000 } },
+                { max: 9999999, prices: { "무약정": 1437000, "1년약정": 1437000, "2년약정": 1437000, "3년약정": 1437000 } }
+            ]
+        }
+    };
+
+    // 계산/조회 시에는 두 DB를 합쳐서 찾습니다 (기존에 저장된 견적을 나중에 열어도 정상 계산되도록).
+    const allPricingDB = Object.assign({}, pricingDB, publicPricingDB);
+
+    // 화면에 보여줄 "서비스 선택" 목록은 선택한 견적 종류에 따라 달라집니다.
+    let activePricingDB = pricingDB;
+
+    function selectQuoteType(type) {
+        window.currentQuoteType = type;
+        activePricingDB = (type === 'public') ? publicPricingDB : pricingDB;
+        document.getElementById('quoteTypeOverlay').style.display = 'none';
+        document.getElementById('quoteTypeBadge').innerText = (type === 'public') ? '[공공용]' : '[기업용]';
+        initAppAfterTypeSelected();
+    }
+
+    async function initAppAfterTypeSelected() {
         populateManagerSelect();
-        loadGithubConfigFromStorage();
         addRow();
 
         // URL에 ?view=경로 가 있으면, 그 견적을 자동으로 불러와서 읽기 전용으로 보여줍니다.
@@ -844,6 +970,11 @@
         }
     };
 
+    window.onload = function() {
+        document.getElementById('quoteDate').valueAsDate = new Date();
+        loadGithubConfigFromStorage();
+    };
+
     function enterDocViewMode() {
         document.body.classList.add('doc-view-mode');
         document.getElementById('viewModeBar').style.display = 'flex';
@@ -862,7 +993,7 @@
             <td style="vertical-align: middle;">
                 <select class="product-sel no-print" onchange="updateOptions(this);">
                     <option value="">-- 서비스 선택 --</option>
-                    ${Object.keys(pricingDB).map(name => `<option value="${name}">${name}</option>`).join('')}
+                    ${Object.keys(activePricingDB).map(name => `<option value="${name}">${name}</option>`).join('')}
                     <option value="direct">직접 입력</option>
                 </select>
                 <input type="text" class="product-custom custom-input no-print" style="display:none;" placeholder="서비스명 직접입력" oninput="calcAll()">
@@ -922,7 +1053,7 @@
                 consumerPrice.removeAttribute('readonly');
                 consumerPrice.placeholder = "단가 직접입력";
                 consumerPrice.value = data.consumerPrice || "";
-            } else if (data.prod && pricingDB[data.prod]) {
+            } else if (data.prod && allPricingDB[data.prod]) {
                 updateOptions(prodSel);
                 tr.querySelector('.term-sel').value = data.term || "";
                 tr.querySelector('.qty').value = data.qty || 1;
@@ -993,7 +1124,7 @@
             qtyInput.style.display = 'inline-block';
         }
 
-        const conditions = Object.keys(pricingDB[prodName].tiers[0].prices);
+        const conditions = Object.keys(allPricingDB[prodName].tiers[0].prices);
         conditions.forEach(cond => {
             termSel.innerHTML += `<option value="${cond}">${cond}</option>`;
         });
@@ -1037,7 +1168,7 @@
                 const cPriceInput = tr.querySelector('.consumer-price').value.replace(/,/g, '');
                 consumerPrice = parseInt(cPriceInput) || 0;
             } else if (prodName && term && billingVal !== "" && qty > 0) {
-                const db = pricingDB[prodName];
+                const db = allPricingDB[prodName];
                 let tier = db.tiers.find(t => qty <= t.max);
                 if (!tier) tier = db.tiers[db.tiers.length - 1];
 
