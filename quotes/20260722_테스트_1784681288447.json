@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-22T00:48:08.446Z",
+  "customerName": "테스트",
+  "contactPerson": "테스트",
+  "quoteDate": "2026-07-22",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "55,000",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "1",
+      "proposed": "50000",
+      "consumerPrice": "86900",
+      "note": ""
+    }
+  ]
+}
