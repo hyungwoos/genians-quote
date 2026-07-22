@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-22T00:53:03.016Z",
+  "customerName": "테스트",
+  "contactPerson": "테스트",
+  "quoteDate": "2026-07-22",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "",
+  "remarksIsAuto": true,
+  "grandTotal": "0",
+  "rows": [
+    {
+      "prod": "",
+      "prodCustom": "",
+      "term": "",
+      "termCustom": "",
+      "billing": "",
+      "qty": "1",
+      "proposed": "",
+      "consumerPrice": "",
+      "note": ""
+    }
+  ]
+}
