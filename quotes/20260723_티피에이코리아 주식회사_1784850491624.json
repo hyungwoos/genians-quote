@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-23T23:48:11.623Z",
+  "customerName": "티피에이코리아 주식회사",
+  "contactPerson": "티피에이코리아 주식회사 이재희 선임님",
+  "quoteDate": "2026-07-23",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Cloud NAC]\n- 월 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "1,815,000",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "2년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "550",
+      "proposed": "3000",
+      "consumerPrice": "6100",
+      "note": ""
+    }
+  ]
+}
