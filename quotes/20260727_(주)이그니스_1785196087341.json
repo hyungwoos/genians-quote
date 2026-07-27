@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-27T23:48:07.340Z",
+  "customerName": "(주)이그니스",
+  "contactPerson": "(주)이그니스 길한동 과장님",
+  "quoteDate": "2026-07-27",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Cloud NAC]\n- 월 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "1,039,500",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "350",
+      "proposed": "2700",
+      "consumerPrice": "7400",
+      "note": ""
+    }
+  ]
+}
