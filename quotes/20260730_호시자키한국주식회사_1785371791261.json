@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-30T00:36:31.260Z",
+  "customerName": "호시자키한국주식회사",
+  "contactPerson": "담당자님",
+  "quoteDate": "2026-07-30",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- EDR 라이선스 포함 \n- 별도 추가 과금 없음\n",
+  "remarksIsAuto": false,
+  "grandTotal": "3,667,840",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "GIES (MDR Service)",
+      "term": "",
+      "termCustom": "1년약정",
+      "billing": "12",
+      "qty": "32",
+      "proposed": "104200",
+      "consumerPrice": "172000",
+      "note": ""
+    }
+  ]
+}
