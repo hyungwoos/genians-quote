@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-30T05:18:03.774Z",
+  "customerName": "아성코리아",
+  "contactPerson": "이찬복 책임님",
+  "quoteDate": "2026-07-30",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Cloud GPI]\n- 연 구독 서비스 방식\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": false,
+  "grandTotal": "4,356,000",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "Genian Cloud GPI",
+      "term": "",
+      "termCustom": "1년 약정",
+      "billing": "1",
+      "qty": "220",
+      "proposed": "18000",
+      "consumerPrice": "104400",
+      "note": ""
+    }
+  ]
+}
