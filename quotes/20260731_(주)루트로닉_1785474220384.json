@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-07-31T05:03:40.384Z",
+  "customerName": "(주)루트로닉",
+  "contactPerson": "(주)루트로닉 안지환 팀장님",
+  "quoteDate": "2026-07-31",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "26,730,000",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "500",
+      "proposed": "48600",
+      "consumerPrice": "64900",
+      "note": ""
+    }
+  ]
+}
