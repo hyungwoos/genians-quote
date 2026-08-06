@@ -1,0 +1,35 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-06T04:05:51.055Z",
+  "customerName": "고양산업진흥원",
+  "contactPerson": "김도현 선임님",
+  "quoteDate": "2026-08-06",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Genian Cloud ZTNA (공공)]\n- 연 구독 서비스 방식\n- Node 수량 기준 월 이용료이며, 실제 구성에 따라 변경될 수 있습니다.\n",
+  "remarksIsAuto": false,
+  "grandTotal": "9,372,000",
+  "rows": [
+    {
+      "prod": "Genian Cloud ZTNA (공공)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "200",
+      "proposed": "30600",
+      "consumerPrice": "7956000",
+      "note": ""
+    },
+    {
+      "prod": "차단서버모듈",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "10",
+      "proposed": "240000",
+      "consumerPrice": "240000",
+      "note": ""
+    }
+  ]
+}
