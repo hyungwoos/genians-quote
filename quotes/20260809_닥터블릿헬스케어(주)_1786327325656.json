@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-10T02:02:05.656Z",
+  "customerName": "닥터블릿헬스케어(주)",
+  "contactPerson": "닥터블릿헬스케어(주) 한지호 매니저님",
+  "quoteDate": "2026-08-09",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "12,518,000",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "200",
+      "proposed": "56900",
+      "consumerPrice": "75900",
+      "note": ""
+    }
+  ]
+}
