@@ -45,7 +45,8 @@
         .custom-input { width: 100%; border: 1px solid #ccc; background: #fff; border-radius: 3px; padding: 4px; font-size: 11px; box-sizing: border-box; }
         tr.row-incomplete td { background: #fff3cd !important; }
         #incompleteWarning { color: #c0392b; font-size: 12px; font-weight: bold; margin-bottom: 6px; min-height: 16px; }
-        .amount-box { margin-top: 15px; border: 2px solid var(--border-color); padding: 15px; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; background: #fdfdfd; }
+        .subtotal-box { margin-top: 15px; border: 1px solid var(--border-color); padding: 10px 15px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; background: #fdfdfd; color: #555; }
+        .amount-box { margin-top: 8px; border: 2px solid var(--border-color); padding: 15px; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; background: #fdfdfd; }
         .remarks-section { margin-top: 25px; font-size: 12px; }
         .remarks-section table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .remarks-section td { padding: 5px; vertical-align: middle; }
@@ -135,6 +136,7 @@
                 display: block !important; white-space: normal !important; word-break: keep-all !important;
                 overflow-wrap: anywhere !important; font-size: 9.5px !important; line-height: 1.2 !important; max-width: 100% !important;
             }
+            .subtotal-box { display: flex !important; flex-direction: row !important; text-align: left !important; justify-content: space-between !important; }
             .amount-box { display: flex !important; flex-direction: row !important; text-align: left !important; justify-content: space-between !important; }
             .remarks-section table { display: table !important; width: 100% !important; table-layout: fixed !important; }
             .remarks-section tbody { display: table-row-group !important; width: 100% !important; }
@@ -346,6 +348,10 @@
             <tbody>
             </tbody>
         </table>
+    </div>
+    <div class="subtotal-box">
+        <div>공급가액 합계 (부가세 제외)</div>
+        <div>₩ <span id="numSubTotal">0</span></div>
     </div>
     <div class="amount-box">
         <div>총 합계금액 (공급 제안가 + 부가세)</div>
@@ -1212,6 +1218,7 @@
             grandVat += vat;
         });
         const totalAmt = grandVal + grandVat;
+        document.getElementById('numSubTotal').innerText = grandVal.toLocaleString();
         document.getElementById('numGrandTotal').innerText = totalAmt.toLocaleString();
         document.getElementById('txtGrandTotal').innerText = amtToKor(totalAmt);
         const warnDiv = document.getElementById('incompleteWarning');
