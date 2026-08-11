@@ -1,0 +1,46 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-11T07:23:33.445Z",
+  "customerName": "씨젠의료재단",
+  "contactPerson": "SM인포메이션 김석근 이사님",
+  "quoteDate": "2026-08-11",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 별도 추가 과금 없음",
+  "remarksIsAuto": false,
+  "grandTotal": "50,820,000",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "1400",
+      "proposed": "18000",
+      "consumerPrice": "59400",
+      "note": ""
+    },
+    {
+      "prod": "GIEA (AV Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "1400",
+      "proposed": "9000",
+      "consumerPrice": "50600",
+      "note": ""
+    },
+    {
+      "prod": "GIER (Ransomware Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "1400",
+      "proposed": "6000",
+      "consumerPrice": "29700",
+      "note": ""
+    }
+  ]
+}
