@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-18T04:56:39.133Z",
+  "customerName": "중앙대학교 서울캠퍼스 융합보안학과 ",
+  "contactPerson": "(주)웅진씽크빅 최광진 과장님",
+  "quoteDate": "2026-08-18",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "",
+  "remarksIsAuto": true,
+  "grandTotal": "0",
+  "rows": [
+    {
+      "prod": "",
+      "prodCustom": "",
+      "term": "",
+      "termCustom": "",
+      "billing": "",
+      "qty": "1",
+      "proposed": "",
+      "consumerPrice": "",
+      "note": ""
+    }
+  ]
+}
