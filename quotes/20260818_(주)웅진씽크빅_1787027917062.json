@@ -1,0 +1,35 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-18T04:38:37.062Z",
+  "customerName": "(주)웅진씽크빅",
+  "contactPerson": "(주)웅진씽크빅 최광진 과장님",
+  "quoteDate": "2026-08-18",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "28,600,000",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "400",
+      "proposed": "45000",
+      "consumerPrice": "70400",
+      "note": ""
+    },
+    {
+      "prod": "GIEA (AV Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "400",
+      "proposed": "20000",
+      "consumerPrice": "57500",
+      "note": ""
+    }
+  ]
+}
