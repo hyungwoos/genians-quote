@@ -1,0 +1,57 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-19T04:50:07.203Z",
+  "customerName": "(주)온앤온정보시스템",
+  "contactPerson": "(주)온앤온정보시스템 이재일 과장님",
+  "quoteDate": "2026-08-19",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "9,429,200",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "80",
+      "proposed": "61100",
+      "consumerPrice": "81400",
+      "note": ""
+    },
+    {
+      "prod": "GIEA (AV Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "80",
+      "proposed": "22800",
+      "consumerPrice": "67500",
+      "note": ""
+    },
+    {
+      "prod": "GIER (Ransomware Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "75",
+      "proposed": "17400",
+      "consumerPrice": "40700",
+      "note": ""
+    },
+    {
+      "prod": "GIED (Device Control)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "75",
+      "proposed": "7400",
+      "consumerPrice": "17800",
+      "note": ""
+    }
+  ]
+}
