@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-20T02:03:37.927Z",
+  "customerName": "(주)경인양행",
+  "contactPerson": "(주)엠앤시큐어 민재해 대표",
+  "quoteDate": "2026-08-20",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian Cloud EDR]\n- 연 구독 서비스 방식\n- 별도 추가 과금 없음",
+  "remarksIsAuto": false,
+  "grandTotal": "27,456,000",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "Genian Cloud EDR",
+      "term": "",
+      "termCustom": "   1년약정",
+      "billing": "12",
+      "qty": "800",
+      "proposed": "31200",
+      "consumerPrice": "64900",
+      "note": ""
+    }
+  ]
+}
