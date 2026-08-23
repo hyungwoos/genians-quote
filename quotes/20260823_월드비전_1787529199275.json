@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-23T23:53:19.274Z",
+  "customerName": "월드비전",
+  "contactPerson": "월드비전 김학일 팀장님",
+  "quoteDate": "2026-08-23",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "41,698,800",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "780",
+      "proposed": "48600",
+      "consumerPrice": "64900",
+      "note": ""
+    }
+  ]
+}
