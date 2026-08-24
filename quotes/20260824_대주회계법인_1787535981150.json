@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-24T01:46:21.149Z",
+  "customerName": "대주회계법인",
+  "contactPerson": "대주회계법인 박수빈 대리님",
+  "quoteDate": "2026-08-24",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian Cloud EDR]\n- 연 구독 서비스 방식",
+  "remarksIsAuto": false,
+  "grandTotal": "30,387,500",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "Genian Cloud EDR",
+      "term": "",
+      "termCustom": "  1년 약정",
+      "billing": "12",
+      "qty": "850",
+      "proposed": "32500",
+      "consumerPrice": "64900",
+      "note": ""
+    }
+  ]
+}
