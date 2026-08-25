@@ -1,0 +1,35 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-25T01:24:18.885Z",
+  "customerName": "KT SAT",
+  "contactPerson": "(주)성진정보통신 한상철 부장님",
+  "quoteDate": "2026-08-25",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "22,341,000",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "GIES (Cloud EDR)",
+      "term": "",
+      "termCustom": "1년약정",
+      "billing": "12",
+      "qty": "300",
+      "proposed": "52700",
+      "consumerPrice": "70400",
+      "note": ""
+    },
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "300",
+      "proposed": "15000",
+      "consumerPrice": "36900",
+      "note": ""
+    }
+  ]
+}
