@@ -1,0 +1,36 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-27T02:37:12.831Z",
+  "customerName": "(주)나인투원",
+  "contactPerson": "(주)나인투원 최규하 팀장님",
+  "quoteDate": "2026-08-27",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Cloud NAC]\n- 월 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "319,000",
+  "supplyTotal": "290,000",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "50",
+      "proposed": "4800",
+      "consumerPrice": "16000",
+      "note": ""
+    },
+    {
+      "prod": "Cloud Sensor",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "1",
+      "proposed": "50000",
+      "consumerPrice": "150000",
+      "note": ""
+    }
+  ]
+}
