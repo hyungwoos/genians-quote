@@ -1,0 +1,36 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-28T07:50:39.146Z",
+  "customerName": "(주)엠지씨글로벌",
+  "contactPerson": "(주)아이티스톤 강성구 매니저님",
+  "quoteDate": "2026-08-28",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Cloud NAC]\n- 월 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "1,155,000",
+  "supplyTotal": "1,050,000",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "500",
+      "proposed": "2000",
+      "consumerPrice": "6700",
+      "note": ""
+    },
+    {
+      "prod": "Cloud Sensor",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "1",
+      "proposed": "50000",
+      "consumerPrice": "150000",
+      "note": ""
+    }
+  ]
+}
