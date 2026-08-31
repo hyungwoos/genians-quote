@@ -1,0 +1,36 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-08-31T05:23:57.014Z",
+  "customerName": "아정네트웍스",
+  "contactPerson": "김문선 팀장님",
+  "quoteDate": "2026-08-31",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Cloud NAC]\n- 월 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "2,970,000",
+  "supplyTotal": "2,700,000",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "1500",
+      "proposed": "1200",
+      "consumerPrice": "3900",
+      "note": ""
+    },
+    {
+      "prod": "Cloud Sensor",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "15",
+      "proposed": "60000",
+      "consumerPrice": "150000",
+      "note": ""
+    }
+  ]
+}
