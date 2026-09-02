@@ -1,0 +1,47 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-09-02T08:45:22.137Z",
+  "customerName": "서울우유",
+  "contactPerson": "(주)씨큐윈 정권묵 이사님",
+  "quoteDate": "2026-09-02",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian Cloud EDR]\n- 연 구독 서비스 방식\n- 24/7 관제 서비스 \n- 별도 추가 과금 없음",
+  "remarksIsAuto": false,
+  "grandTotal": "11,876,700",
+  "supplyTotal": "10,797,000",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "    Genian Cloud EDR",
+      "term": "",
+      "termCustom": "  1년 약정",
+      "billing": "12",
+      "qty": "170",
+      "proposed": "36500",
+      "consumerPrice": "75900",
+      "note": ""
+    },
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "170",
+      "proposed": "20000",
+      "consumerPrice": "41700",
+      "note": ""
+    },
+    {
+      "prod": "GIER (Ransomware Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "80",
+      "proposed": "14900",
+      "consumerPrice": "40700",
+      "note": ""
+    }
+  ]
+}
