@@ -1,0 +1,25 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-09-02T00:17:55.178Z",
+  "customerName": "(주)가스트론",
+  "contactPerson": "(주)가스트론 최근호 대리님",
+  "quoteDate": "2026-09-02",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식(최소 계약 금액)\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": false,
+  "grandTotal": "2,750,000",
+  "supplyTotal": "2,500,000",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "1",
+      "proposed": "2500000",
+      "consumerPrice": "5000000",
+      "note": ""
+    }
+  ]
+}
