@@ -1,0 +1,25 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-09-03T08:29:01.754Z",
+  "customerName": "삼우",
+  "contactPerson": "(주)엑스퍼넷 주상혁 과장님",
+  "quoteDate": "2026-09-03",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian Cloud EDR]\n- 연 구독 서비스 방식\n- 별도 추가 과금 없음",
+  "remarksIsAuto": false,
+  "grandTotal": "8,030,000",
+  "supplyTotal": "7,300,000",
+  "rows": [
+    {
+      "prod": "direct",
+      "prodCustom": "    Genian Cloud EDR",
+      "term": "",
+      "termCustom": "  1년 약정",
+      "billing": "12",
+      "qty": "200",
+      "proposed": "36500",
+      "consumerPrice": "75900",
+      "note": ""
+    }
+  ]
+}
