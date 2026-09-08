@@ -1,0 +1,25 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-09-08T07:23:58.872Z",
+  "customerName": "(주)에어릭스",
+  "contactPerson": "(주)론스텍 장채철 팀장님",
+  "quoteDate": "2026-09-08",
+  "manager": "kholong@genians.com / 010-6305-6392",
+  "remarks": "[Genian MDR]\n- 연 구독 서비스 방식\n- 관제/대응/분석/조치 모두 포함\n- 별도 추가 과금 없음",
+  "remarksIsAuto": true,
+  "grandTotal": "16,366,350",
+  "supplyTotal": "14,878,500",
+  "rows": [
+    {
+      "prod": "GIES (MDR Service)",
+      "prodCustom": "",
+      "term": "1년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "273",
+      "proposed": "54500",
+      "consumerPrice": "113400",
+      "note": ""
+    }
+  ]
+}
