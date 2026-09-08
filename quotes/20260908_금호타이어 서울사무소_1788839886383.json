@@ -1,0 +1,25 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-09-08T03:58:06.382Z",
+  "customerName": "금호타이어 서울사무소",
+  "contactPerson": "박준성 책임님",
+  "quoteDate": "2026-09-08",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Cloud NAC]\n- 23년도 NAC(네트워크 접근제어)솔루션 도입 계약 조건에 따름\n- 18,000 Node 라이선스, 임대센서 모두 포함",
+  "remarksIsAuto": false,
+  "grandTotal": "880,880",
+  "supplyTotal": "800,800",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "무약정",
+      "termCustom": "",
+      "billing": "1",
+      "qty": "1",
+      "proposed": "800800",
+      "consumerPrice": "2402400",
+      "note": ""
+    }
+  ]
+}
