@@ -1,0 +1,25 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-09-11T01:32:18.199Z",
+  "customerName": "(주)섹타나인",
+  "contactPerson": "코즈몰래 김대준 대표님",
+  "quoteDate": "2026-09-11",
+  "manager": "choihw@genians.com / 010-7278-4782",
+  "remarks": "[Cloud NAC]\n- 연 구독 서비스 방식\n- 네트워크 구성에 따라 장비 및 수량이 변경 될 수 있습니다.\n- 구축/기술지원/유지보수 모두 포함\n- 별도 추가 과금 없음\n- 임대센서 5EA 포함",
+  "remarksIsAuto": false,
+  "grandTotal": "71,500,000",
+  "supplyTotal": "65,000,000",
+  "rows": [
+    {
+      "prod": "Cloud NAC V6.0",
+      "prodCustom": "",
+      "term": "3년약정",
+      "termCustom": "",
+      "billing": "12",
+      "qty": "10000",
+      "proposed": "6500",
+      "consumerPrice": "32400",
+      "note": ""
+    }
+  ]
+}
