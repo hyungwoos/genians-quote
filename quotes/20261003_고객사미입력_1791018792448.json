@@ -1,0 +1,25 @@
+{
+  "version": "3.0",
+  "savedAt": "2026-10-03T09:13:12.447Z",
+  "customerName": "",
+  "contactPerson": "",
+  "quoteDate": "2026-10-03",
+  "manager": "",
+  "remarks": "",
+  "remarksIsAuto": true,
+  "grandTotal": "0",
+  "supplyTotal": "0",
+  "rows": [
+    {
+      "prod": "",
+      "prodCustom": "",
+      "term": "",
+      "termCustom": "",
+      "billing": "",
+      "qty": "1",
+      "proposed": "",
+      "consumerPrice": "",
+      "note": ""
+    }
+  ]
+}
